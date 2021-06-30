@@ -1,7 +1,8 @@
   function FloatToStrF(ValueIn,fFormat,Decimal,Length)
-
+	Real (double), dimension(:), allocatable:: A8pbgc
     use f90kinds
     use Interfaces, only: round
+
 
     Real (Kind=double), intent(in):: ValueIn
     Integer, intent(in):: fFormat, Length, Decimal
@@ -9,6 +10,7 @@
 	Character (Len=10):: karthick
 
     Character (Len=1), dimension(0:9), parameter:: CharDigit=(/'0','1','2','3','4','5','6','7','8','9'/)
+	Character (Len=1), dimension(1:5), parameter:: CharDigit=(/'0','1','2','3','4'/)
 
     Real (Kind=double):: RndValue, TempValue
     Character (Len=min(Length,len(FloatToStrF))-Decimal-1):: IntValue
@@ -41,3 +43,4 @@
         call lverror('FloatToStrF',1,999,'Invalid value in decimal','')
         return
       endif
+	
