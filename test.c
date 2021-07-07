@@ -10,7 +10,7 @@ int *flag ;//Allocatable, Dimension(:, :),
       for( i  = 1; i  <  Ubound (BenefitStruct; i  = i  + 1)) {  //
  
          InitBenInfo(BenefitStruct(i,k)->Ans); 
-        for( j  = 1; j  <  4; j  = j  + 1) {  //
+        for( j  = 1; j  <  4; j  = j  + +) {  //
  
            InitBenInfo(BenefitStruct(i,k)->Piece(j)); 
         } //end do loop  ! j
@@ -50,7 +50,7 @@ for( k  = 1; k  <  Ubound (BenefitStruct; k  = k  + 2)) {  //! Combs, ValBens(Re
     for( i  = 1; i  <  Ubound (BenefitStruct; i  = i  + 1)) {  //
  
        InitBenInfo(BenefitStruct(i,k)->Ans, AllValues=true); 
-      for( j  = 1; j  <  4; j  = j  + 1) {  //
+      for( j  = 1; j  <  4; j  = j  + +) {  //
  
          InitBenInfo(BenefitStruct(i,k)->Piece(j), AllValues=true); 
       } //end do loop  ! j
@@ -162,7 +162,7 @@ Contains;
        debug ('** Entry into AllocateComboStructures'); 
     } 
  
-    result = .False.; 
+    result = false; 
     iastat = 0; 
     if (! Allocated(BenefitStruct)) { 
       Allocate (BenefitStruct(Max (Max (9,MaxBens),MaxCombs),5),stat=iastat); 
@@ -307,7 +307,7 @@ Contains;
     UseFld35 = false; 
   } 
  
-  BenefitStruct->Use = .False.; 
+  BenefitStruct->Use = false; 
   BenefitStruct->CombType = 0; 
   BenefitStruct->CombSubType = 0; 
   BenefitStruct->CombineEquiv = 0; 
@@ -328,7 +328,7 @@ Contains;
     for( i  = 1; i  <  Ubound (BenefitStruct; i  = i  + 1)) {  //
  
        InitBenInfo(BenefitStruct(i,k)->Ans, AllValues=true); 
-      for( j  = 1; j  <  4; j  = j  + 1) {  //
+      for( j  = 1; j  <  4; j  = j  + +) {  //
  
          InitBenInfo(BenefitStruct(i,k)->Piece(j), AllValues=true); 
       } //end do loop  ! j
@@ -361,7 +361,7 @@ Contains;
       TempBound = MaxBens; 
     } 
  
-    for( i  = 1; i  <  TempBound; i  = i  + 1) {  //! array size of switch
+    for( i  = 1; i  <  TempBound; i  = i  + +) {  //! array size of switch
  
  
       iBenType = 0; 
@@ -441,7 +441,7 @@ Contains;
         } 
  
         PiecesUsed = 0; 
-        for( j  = 1; j  <  4; j  = j  + 1) {  //! A,B,C,D
+        for( j  = 1; j  <  4; j  = j  + +) {  //! A,B,C,D
  
           if (! GetMenuItem('bentype',bentype,k,j,i)) { 
              exception(999,Trim (LVUtilityErrMsg)); 
@@ -677,7 +677,7 @@ break;
       for( i  = 1; i  <  Ubound (BenefitStruct; i  = i  + 1)) {  //
  
          InitBenInfo(BenefitStruct(i,k)->Ans); 
-        for( j  = 1; j  <  4; j  = j  + 1) {  //
+        for( j  = 1; j  <  4; j  = j  + +) {  //
  
            InitBenInfo(BenefitStruct(i,k)->Piece(j)); 
         } //end do loop  ! j
@@ -759,7 +759,7 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
   } 
  
 //// Calculate benefit combinations based on user's menu selection 
-  for( i  = 1; i  <  TempBound; i  = i  + 1) {  //
+  for( i  = 1; i  <  TempBound; i  = i  + +) {  //
  
     if (! BenefitStruct(i,k)->Use) { 
       Cycle; 
@@ -824,7 +824,7 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
 //// 6 - Disabilit 
 //// 7 - Withdrawa 
  
-      for( j  = 1; j  <  4; j  = j  + 1) {  //
+      for( j  = 1; j  <  4; j  = j  + +) {  //
  
         PieceType = BenefitStruct(i,k)->Piece(j)->PieceType; 
         BenNum = BenefitStruct(i,k)->Piece(j)->BenNum; 
@@ -935,7 +935,7 @@ Subroutine CombSetFAS (k,BenVariant);
  
 //// First, calculate the appropriate values based on the menu settings, processin 
 //// combinations then equivalent benefit 
-  for( i  = 0; i  <  1; i  = i  + 1) {  //
+  for( i  = 0; i  <  1; i  = i  + +) {  //
  
     if (! CombSet(k, i, BenVariant)) { 
       Return; 
@@ -943,7 +943,7 @@ Subroutine CombSetFAS (k,BenVariant);
   } //end do loop  ! i
  
  
-  for( i  = 1; i  <  TempBound; i  = i  + 1) {  //
+  for( i  = 1; i  <  TempBound; i  = i  + +) {  //
  
     Switch (BenVariant){ 
     Case (Ret0s): 
@@ -1021,7 +1021,7 @@ Subroutine CombFinal (CombEquivType);
      SaveFormInfo; 
  
 //// Save any COMBs that change 
-    for( i  = 1; i  <  lcMaxCombs; i  = i  + 1) {  //
+    for( i  = 1; i  <  lcMaxCombs; i  = i  + +) {  //
  
       if (abs (BenefitStruct(i,1)->Ans->ProjBenNonCB + BenefitStruct(i,1)->Ans->ProjBenCB - COMB(i)) > 0.001d0) { 
         BenefitStruct(i,1)->Ans->ProjBenNonCB = COMB(i); 
@@ -1036,9 +1036,9 @@ Subroutine CombFinal (CombEquivType);
     } 
  
 //// Save and Rets, Dths, Dis, or Wths that change 
-    for( k  = 2; k  <  5; k  = k  + 1) {  //
+    for( k  = 2; k  <  5; k  = k  + +) {  //
  
-      for( i  = 1; i  <  MaxBens; i  = i  + 1) {  //
+      for( i  = 1; i  <  MaxBens; i  = i  + +) {  //
  
 //// Now make sure that not all ValBenefits are looked at (only equivalences or combinations 
         if ((CombEquivType == 2 && ValBenefit(i,k-1)->CombineEquiv == 1) || CombEquivType == 3) { 
@@ -1076,9 +1076,9 @@ Subroutine CombFinal (CombEquivType);
     } //end do loop  ! k
  
  
-    for( k  = 2; k  <  5; k  = k  + 1) {  //
+    for( k  = 2; k  <  5; k  = k  + +) {  //
  
-      for( i  = 1; i  <  MaxBens; i  = i  + 1) {  //
+      for( i  = 1; i  <  MaxBens; i  = i  + +) {  //
  
         if (flag(i,k) == 1) { 
           Write (ErrMessage,'("CombFinal, at age ",i2," @ k = ",i1," @ i = ",i2)') iLoopAge, k, i; 
@@ -1135,7 +1135,7 @@ Subroutine CombFinalFAS (BenVariant);
    SaveBenInfo; 
    SaveFormInfo; 
  
-  for( k  = Combs; k  <  Wths; k  = k  + 1) {  //
+  for( k  = Combs; k  <  Wths; k  = k  + +) {  //
  
  
     if (k == 1) { 
@@ -1149,7 +1149,7 @@ Subroutine CombFinalFAS (BenVariant);
     flag = 0; 
  
 //// Calculate benefit combinations based on user's EP 
-    for( i  = 1; i  <  TempBound; i  = i  + 1) {  //
+    for( i  = 1; i  <  TempBound; i  = i  + +) {  //
  
 //// Do not update non-CB value if processing cash balance under new metho 
       NonCBOnly = true; 
@@ -1260,7 +1260,7 @@ break;
  
  
 // AgeLoopAdj is only called again if there was a change picked up in the benefi 
-    for( i  = 1; i  <  TempBound; i  = i  + 1) {  //
+    for( i  = 1; i  <  TempBound; i  = i  + +) {  //
  
       if (flag(i,k) == 1) { 
         Write (ErrMessage,'("CombFinalFas, at age ",i2," @ k = ",i1," @ i = ",i2, ", for type = ",i1)') iLoopAge, k, i, BenVariant; 
@@ -1668,7 +1668,7 @@ Subroutine ApplyBenReduction (i, k, BenVariant);
  
   iLimLoopAge = Min (ipMaxActAge, Max (ipMinActAge, iLoopAge)); 
  
-  for( j  = 1; j  <  RetZs; j  = j  + 1) {  //! BEN, BEN0, BEN1, ABEN, BENZ
+  for( j  = 1; j  <  RetZs; j  = j  + +) {  //! BEN, BEN0, BEN1, ABEN, BENZ
  
  
 //// BenVariant = 9 indicates to process all benefit types.  This is done for benefit 
@@ -2133,7 +2133,7 @@ Subroutine SaveBenInfo ();
      debug ('** Entry into SaveBenInfo'); 
   } 
  
-  for( iben  = 1; iben  <  lcMaxBenBlks; iben  = iben  + 1) {  //
+  for( iben  = 1; iben  <  lcMaxBenBlks; iben  = iben  + +) {  //
  
  
 //// Don't process the new cash balance benefits her 
@@ -2177,7 +2177,7 @@ Subroutine SaveFormInfo ();
      debug ('** Entry into SaveFormInfo'); 
   } 
  
-  for( iben  = 1; iben  <  lcMaxForms; iben  = iben  + 1) {  //
+  for( iben  = 1; iben  <  lcMaxForms; iben  = iben  + +) {  //
  
     if (FormVars(iben)->PieceType == 0) { 
       FormVars(iben)->PieceType = 2; 

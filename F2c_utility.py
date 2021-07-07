@@ -221,6 +221,7 @@ def proc_LogicalOperators(fortline):
     fortline = fortline.replace('.eq.', '==')
     fortline = fortline.replace('.true.', 'true')
     fortline = fortline.replace('.false.', 'false')
+    fortline = fortline.replace('.False.', 'false')
     fortline = fortline.replace(' if ', ' if ')
     fortline = fortline.replace('subroutine', 'void')
     fortline = fortline.replace('then', '{')
@@ -281,7 +282,7 @@ def proc_doloop(fortline):
     if (len(forlooplimits)>2):
       i_incr = forlooplimits[2]
     else:
-      i_incr = '1'
+      i_incr = '+'
     #LV_print(i_equal, i_range, i_incr)
     istartIdx =  fortline_minus_comment.find('Do')
     if istartIdx == -1:
