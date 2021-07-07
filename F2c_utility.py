@@ -246,6 +246,7 @@ def proc_LogicalOperators(fortline):
     fortline = fortline.replace('Call', '')
     fortline = fortline.replace('%', '->')
     fortline = proc_mathOperators(fortline)
+
     if fortline.find('if ') > -1:
         fortline = fortline.replace('\n', '')
     elif fortline.find('If ') > -1:
