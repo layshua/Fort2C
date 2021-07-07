@@ -237,6 +237,7 @@ def proc_LogicalOperators(fortline):
     if fortline.find('if ') > -1:
         fortline = fortline.replace('\n', '')
     elif fortline.find('If ') > -1:
+        fortline = fortline.replace('If', 'if')
         fortline = fortline.replace('\n', '')
     elif fortline.find('else') > -1:
         fortline = fortline.replace('\n', '')
@@ -411,7 +412,8 @@ for declline in sFil:
                         proc_LogicalOperators(declline)
             else:
                 b = a.replace('\n', '')
-                LV_print(declline[0:len(declline)-1])
+                b = b.replace('!', '//')
+                LV_print(b[0:len(declline)-1])
                 #proc_LogicalOperators(declline)
         else:
             LV_print(a)

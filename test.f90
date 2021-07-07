@@ -1,3 +1,4 @@
+!// Dummy arguments
 Integer, Dimension(:, :), Allocatable:: flag
           ValBenefit,                                                                     &
           CombSet,                                                                        &
