@@ -219,6 +219,7 @@ def proc_LogicalOperators(fortline):
     fortline = fortline.replace('.and.', '&&')
     fortline = fortline.replace('.or.', '||')
     fortline = fortline.replace('.eq.', '==')
+    fortline = fortline.replace('.True.', 'true')
     fortline = fortline.replace('.true.', 'true')
     fortline = fortline.replace('.false.', 'false')
     fortline = fortline.replace('.False.', 'false')
@@ -226,13 +227,14 @@ def proc_LogicalOperators(fortline):
     fortline = fortline.replace('subroutine', 'void')
     fortline = fortline.replace('then', '{')
     fortline = fortline.replace('Then', '{')
-    fortline = fortline.replace('Else', '} Else {')
+    fortline = fortline.replace('Else', '} else {')
     fortline = fortline.replace('else', '} else {')
     fortline = fortline.replace('endif', '}')
     fortline = fortline.replace('End If', '}')
     fortline = fortline.replace('call ', '')
     fortline = fortline.replace('Call', '')
     fortline = fortline.replace('%', '->')
+    fortline = fortline.replace('debug', 'Debug')
     fortline = proc_mathOperators(fortline)
 
     if fortline.find('if ') > -1:

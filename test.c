@@ -159,7 +159,7 @@ Contains;
  
  
     if (DebugCombos) { 
-       debug ('** Entry into AllocateComboStructures'); 
+       Debug ('** Entry into AllocateComboStructures'); 
     } 
  
     result = false; 
@@ -268,7 +268,7 @@ Contains;
     result = true; 
  
     if (DebugCombos) { 
-       debug ('** Exit from AllocateComboStructures'); 
+       Debug ('** Exit from AllocateComboStructures'); 
     } 
  
   } // end function ALLOCATECOMBOSTRUCTURES 
@@ -296,7 +296,7 @@ Contains;
  
  
   if (DebugCombos) { 
-     debug ('** Entry into ReadMenuVarComb'); 
+     Debug ('** Entry into ReadMenuVarComb'); 
   } 
   TempBound = 0; 
   i = 0; 
@@ -357,7 +357,7 @@ Contains;
  
     if (k == 1) { 
       TempBound = lcMaxCombs; 
-    } Else { 
+    } } else { { 
       TempBound = MaxBens; 
     } 
  
@@ -381,7 +381,7 @@ Contains;
       if (! GetMenuItem(Switch, BenefitStruct(i,k)->Use, SwitchLabel)) { 
         if (LVutilityErrMsg(:48) == 'Switch setting not specified as either ON or OFF') { 
           BenefitStruct(i,k)->Use = false; 
-        } Else { 
+        } } else { { 
            exception(999,Trim (LVUtilityErrMsg)); 
           Return; 
         } 
@@ -398,9 +398,9 @@ Contains;
  
       if (k == 1 && Debug_On) { 
         if (Combination(i)->Use) { 
-           debug('   Combination Use = True "' //mendescrip(k,1)//'"(' //inttostr(i,2) //')'); 
-        } Else { 
-           debug('   Combination Use = False "' //mendescrip(k,1)//'"(' //inttostr(i,2) //')'); 
+           Debug('   Combination Use = True "' //mendescrip(k,1)//'"(' //inttostr(i,2) //')'); 
+        } } else { { 
+           Debug('   Combination Use = False "' //mendescrip(k,1)//'"(' //inttostr(i,2) //')'); 
         } 
       } 
  
@@ -421,7 +421,7 @@ Contains;
            exception(999,Trim (LVUtilityErrMsg)); 
           Return; 
         } 
-      } Else { 
+      } } else { { 
         CombineEquiv = 1  !// always combine if processing COMB 
       } 
  
@@ -539,7 +539,7 @@ break;
           BenefitStruct(i,k)->Use = false; 
         } 
  
-      } Else { ! CombineEquiv != 1, so not a combination 
+      } } else { { ! CombineEquiv != 1, so not a combination 
  
 //// Ignore benefits that are switched on but not included in a plan.  Applies onl 
 //// to benefits defined as equivalent to another 
@@ -563,7 +563,7 @@ break;
         if (! GetMenuItem('fld35', CharVar, k-1, i)) { 
            exception(999,Trim (LVUtilityErrMsg)); 
           Return; 
-        } Else { 
+        } } else { { 
           if (len_Trim (CharVar) > 0) { 
             UseFld35(k-1, i) = true; 
           } 
@@ -575,10 +575,10 @@ break;
   } //end do loop  ! k
  
  
-  result = .True.; 
+  result = true; 
  
   if (DebugCombos) { 
-     debug ('** Exit from ReadMenuVarComb'); 
+     Debug ('** Exit from ReadMenuVarComb'); 
   } 
  
 } // end function READMENUVARCOMB 
@@ -595,7 +595,7 @@ break;
  
  
     if (DebugCombos) { 
-       debug ('** Entry into DeallocateComboStructures'); 
+       Debug ('** Entry into DeallocateComboStructures'); 
     } 
  
 //// First, disassociate the array pointer 
@@ -651,7 +651,7 @@ break;
     } 
  
     if (DebugCombos) { 
-       debug ('** Exit from DeallocateComboStructures'); 
+       Debug ('** Exit from DeallocateComboStructures'); 
     } 
  
   } // end subroutine DEALLOCATECOMBOSTRUCTURES 
@@ -669,7 +669,7 @@ break;
  
  
     if (DebugCombos) { 
-       debug ('** Entry into InitializeCombArrays'); 
+       Debug ('** Entry into InitializeCombArrays'); 
     } 
  
     for( k  = 1; k  <  Ubound (BenefitStruct; k  = k  + 2)) {  //
@@ -706,7 +706,7 @@ break;
     HBENnonCB  = 0; 
  
     if (DebugCombos) { 
-       debug ('** Exit from InitializeCombArrays'); 
+       Debug ('** Exit from InitializeCombArrays'); 
     } 
  
   } // end subroutine INITIALIZECOMBARRAYS 
@@ -743,7 +743,7 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
  
  
   if (DebugCombos) { 
-     debug ('** Entry into CombSet'); 
+     Debug ('** Entry into CombSet'); 
   } 
  
   result = false; 
@@ -754,7 +754,7 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
  
   if (k == Combs) { 
     TempBound = lcMaxCombs; 
-  } Else { 
+  } } else { { 
     TempBound = MaxBens; 
   } 
  
@@ -774,7 +774,7 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
     if (CombineEquiv == ProcessEquiv) { 
       if (k == Combs) { 
         Cycle; 
-      } Else { if (ValBenefit(i,k-1)->CombineEquiv == 1) { 
+      } } else { { if (ValBenefit(i,k-1)->CombineEquiv == 1) { 
         Cycle; 
       } 
     } 
@@ -806,10 +806,10 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
       if (PieceType > 0 && BenNum > 0) { 
          SetBenEqual(ValBenefit(BenNum,PieceType)->Ans,ValBenefit(i,k-1)->Ans, BenVariant); 
          ApplyBenReduction(i, k, BenVariant); 
-      } Else { 
+      } } else { { 
          InitBenInfo(ValBenefit(i,k-1)->Ans); 
       } 
-    } Else { 
+    } } else { { 
  
 //// The following is for benefits that are defined as a combination of other benefit blocks and/or benefit 
  
@@ -832,16 +832,16 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
         if (PieceType == 0 || BenNum == 0) { 
 //// No block type, zero out piec 
            InitBenInfo(BenefitStruct(i,k)->Piece(j)); 
-        } Else { if (PieceType == 3) { 
+        } } else { { if (PieceType == 3) { 
 //// Set Piece (BenComb) equal to a Combinatio 
             SetBenEqual(Combination(BenNum)->Ans,BenefitStruct(i,k)->Piece(j)); 
-        } Else { if (PieceType > 3) { 
+        } } else { { if (PieceType > 3) { 
 //// Set Piece (BenComb) equal to an already declared ValBenefi 
            SetBenEqual(ValBenefit(BenNum,PieceType-3)->Ans,BenefitStruct(i,k)->Piece(j)); 
-        } Else { if (PieceType == 1) { 
+        } } else { { if (PieceType == 1) { 
 //// Set piece equal to a BEN valu 
            SetBenEqual(BenVars(BenNum), BenefitStruct(i,k)->Piece(j)); 
-        } Else { 
+        } } else { { 
 //// Seq piece equal to a FOR 
           BenefitStruct(i,k)->Piece(j)->ARETnonCB = FormVars(BenNum)->ARETnonCB; 
           BenefitStruct(i,k)->Piece(j)->HBENnonCB = FormVars(BenNum)->HBENnonCB; 
@@ -880,7 +880,7 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
       TempProjBen = BenefitStruct(i,k)->Ans->ProjBenCB + BenefitStruct(i,k)->Ans->ProjBenNonCB; 
       if (k == Combs) { 
         COMB(i) = TempProjBen; 
-      } Else { 
+      } } else { { 
         BFT(i,k-1) = TempProjBen; 
       } 
     } 
@@ -900,7 +900,7 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
   result = true; 
  
   if (DebugCombos) { 
-     debug ('** Exit from CombSet'); 
+     Debug ('** Exit from CombSet'); 
   } 
  
 } // end function COMBSET 
@@ -924,12 +924,12 @@ Subroutine CombSetFAS (k,BenVariant);
  
  
   if (DebugCombos) { 
-     debug ('** Entry into CombSetFAS'); 
+     Debug ('** Entry into CombSetFAS'); 
   } 
  
   if (k == 1) { 
     TempBound = lcMaxCombs; 
-  } Else { 
+  } } else { { 
     TempBound = MaxBens; 
   } 
  
@@ -949,21 +949,21 @@ Subroutine CombSetFAS (k,BenVariant);
     Case (Ret0s): 
       if (k == Combs) { 
         Comb0(i) = BenefitStruct(i,k)->Ans->Ben0nonCB + BenefitStruct(i,k)->Ans->Ben0CB; 
-      } Else { 
+      } } else { { 
         Ret0x(i,k-1) = BenefitStruct(i,k)->Ans->Ben0nonCB + BenefitStruct(i,k)->Ans->Ben0CB * BenefitStruct(i,k)->CBadjust; 
       } 
 break; 
     Case (Ret1s): 
       if (k == Combs) { 
         Comb1(i) = BenefitStruct(i,k)->Ans->Ben1nonCB + BenefitStruct(i,k)->Ans->Ben1CB; 
-       } Else { 
+       } } else { { 
         Ret1x(i,k-1) = BenefitStruct(i,k)->Ans->Ben1nonCB + BenefitStruct(i,k)->Ans->Ben1CB * BenefitStruct(i,k)->CBadjust; 
       } 
 break; 
     Case (ARets): 
       if (k == Combs) { 
         AComb(i) = BenefitStruct(i,k)->Ans->ABenNonCB + BenefitStruct(i,k)->Ans->ABenCB; 
-      } Else { 
+      } } else { { 
         ARetx(i,k-1) = BenefitStruct(i,k)->Ans->ABenNonCB + BenefitStruct(i,k)->Ans->ABenCB * BenefitStruct(i,k)->CBadjust; 
         VRetx(i,k-1) = ARetx(i,k-1); 
       } 
@@ -971,13 +971,13 @@ break;
     Case (RetZs): 
       if (k == Combs) { 
         CombZ(i) = BenefitStruct(i,k)->Ans->BenZNonCB + BenefitStruct(i,k)->Ans->BenZCB; 
-      } Else { if (k == Rets) { 
+      } } else { { if (k == Rets) { 
         RetZ(i) = BenefitStruct(i,k)->Ans->BenZnonCB + BenefitStruct(i,k)->Ans->BenZCB * BenefitStruct(i,k)->CBAdjust; 
-      } Else { if (k == Dths) { 
+      } } else { { if (k == Dths) { 
         DthZ(i) = BenefitStruct(i,k)->Ans->BenZnonCB + BenefitStruct(i,k)->Ans->BenZCB * BenefitStruct(i,k)->CBAdjust; 
-      } Else { if (k == Disbs) { 
+      } } else { { if (k == Disbs) { 
         DisZ(i) = BenefitStruct(i,k)->Ans->BenZnonCB + BenefitStruct(i,k)->Ans->BenZCB * BenefitStruct(i,k)->CBAdjust; 
-      } Else { if (k == Wths) { 
+      } } else { { if (k == Wths) { 
         WthZ(i) = BenefitStruct(i,k)->Ans->BenZnonCB + BenefitStruct(i,k)->Ans->BenZCB * BenefitStruct(i,k)->CBAdjust; 
       } 
 break; 
@@ -988,7 +988,7 @@ break;
  
  
   if (DebugCombos) { 
-     debug ('** Exit from CombSetFas'); 
+     Debug ('** Exit from CombSetFas'); 
   } 
  
 } // end subroutine COMBSETFAS 
@@ -1012,7 +1012,7 @@ Subroutine CombFinal (CombEquivType);
  
  
     if (DebugCombos) { 
-       debug ('** Entry into CombFinal'); 
+       Debug ('** Entry into CombFinal'); 
     } 
  
     flag = 0; 
@@ -1102,7 +1102,7 @@ Subroutine CombFinal (CombEquivType);
  
  
   if (DebugCombos) { 
-     debug ('** Exit from CombFinal'); 
+     Debug ('** Exit from CombFinal'); 
   } 
  
 } // end subroutine COMBFINAL 
@@ -1129,7 +1129,7 @@ Subroutine CombFinalFAS (BenVariant);
  
  
   if (DebugCombos) { 
-     debug ('** Entry into CombFinalFAS'); 
+     Debug ('** Entry into CombFinalFAS'); 
   } 
  
    SaveBenInfo; 
@@ -1140,7 +1140,7 @@ Subroutine CombFinalFAS (BenVariant);
  
     if (k == 1) { 
       TempBound = lcMaxCombs; 
-    } Else { 
+    } } else { { 
       TempBound = MaxBens; 
     } 
  
@@ -1170,7 +1170,7 @@ Subroutine CombFinalFAS (BenVariant);
  
         if (k == Combs) { 
           NewValue = Comb0(i); 
-        } Else { 
+        } } else { { 
           NewValue = Ret0x(i,k-1); 
         } 
  
@@ -1189,7 +1189,7 @@ break;
  
         if (k == Combs) { 
           NewValue = Comb1(i); 
-        } Else { 
+        } } else { { 
           NewValue = Ret1x(i,k-1); 
         } 
  
@@ -1208,7 +1208,7 @@ break;
  
         if (k == Combs) { 
           NewValue = AComb(i); 
-        } Else { 
+        } } else { { 
           NewValue = ARetx(i,k-1); 
         } 
  
@@ -1287,7 +1287,7 @@ break;
  
  
   if (DebugCombos) { 
-     debug ('** Exit from CombFinalFAS'); 
+     Debug ('** Exit from CombFinalFAS'); 
   } 
  
 } // end subroutine COMBFINALFAS 
@@ -1308,7 +1308,7 @@ Subroutine CalcAns (C, BenVariant);
  
  
   if (DebugCombos) { 
-     debug ('** Entry into CalcAns'); 
+     Debug ('** Entry into CalcAns'); 
   } 
  
  
@@ -1336,7 +1336,7 @@ Subroutine CalcAns (C, BenVariant);
  
     if (PieceCount == 1) { 
        SetBenEqual(C->Piece(2), AA); 
-    } Else { 
+    } } else { { 
        SetBenEqual(C->Piece(2), BB); 
     } 
   } 
@@ -1346,9 +1346,9 @@ Subroutine CalcAns (C, BenVariant);
  
     if (PieceCount == 1) { 
        SetBenEqual(C->Piece(3), AA); 
-    } Else { if (PieceCount == 2) { 
+    } } else { { if (PieceCount == 2) { 
        SetBenEqual(C->Piece(3), BB); 
-    } Else { 
+    } } else { { 
        SetBenEqual(C->Piece(3), CC); 
     } 
   } 
@@ -1358,11 +1358,11 @@ Subroutine CalcAns (C, BenVariant);
  
     if (PieceCount == 1) { 
        SetBenEqual(C->Piece(4), AA); 
-    } Else { if (PieceCount == 2) { 
+    } } else { { if (PieceCount == 2) { 
        SetBenEqual(C->Piece(4), BB); 
-    } Else { if (PieceCount == 3) { 
+    } } else { { if (PieceCount == 3) { 
        SetBenEqual(C->Piece(4), CC); 
-    } Else { 
+    } } else { { 
        SetBenEqual(C->Piece(4), DD); 
     } 
   } 
@@ -1373,7 +1373,7 @@ Subroutine CalcAns (C, BenVariant);
  
   if (PieceCount == 1) { 
      SetBenEqual(AA, Ans); 
-  } Else { 
+  } } else { { 
  
     Switch (C%CombType){ 
     Case (1)                      : // Add 
@@ -1475,14 +1475,14 @@ break;
       Case (4): 
         if (PieceCount == 3) { 
           Ans = CombosMIN(AA,CombosDIFF(BB,CC)); 
-        } Else { 
+        } } else { { 
           Ans = CombosMIN(AA,CombosDIFF(BB,CombosDIFF(CC,DD))); 
         } 
 break; 
       Case (5): 
         if (PieceCount == 3) { 
           Ans = CombosMIN(CombosDIFF(AA,BB), CC); 
-        } Else { 
+        } } else { { 
           Ans = CombosMIN(CombosDIFF(AA,BB),CombosDIFF(CC,DD)); 
         } 
 break; 
@@ -1495,7 +1495,7 @@ break;
       Case (8): 
         if (PieceCount == 3) { 
           Ans = CombosMax(CombosDIFF(AA,BB),CC); 
-        } Else { 
+        } } else { { 
           Ans = CombosMIN(CombosMax(CombosDIFF(AA,BB),CC),DD); 
         } 
 break; 
@@ -1516,7 +1516,7 @@ break;
       Case (3): 
         if (PieceCount == 3) { 
           Ans = CombosMULT(AA, CombosDIFF(BB,CC)); 
-        } Else { 
+        } } else { { 
           Ans = CombosMULT(AA, CombosDIFF(CombosADD(BB,CC), DD)); 
         } 
 break; 
@@ -1537,39 +1537,39 @@ break;
       Case (1): 
         if (PieceCount == 2) { 
           Ans = CombosDIV(AA,BB); 
-        } Else { if (PieceCount == 3) { 
+        } } else { { if (PieceCount == 3) { 
           Ans = CombosDIV(CombosADD(AA,BB),CC); 
-        } Else { 
+        } } else { { 
           Ans = CombosDIV(CombosADD(AA,BB,CC),DD); 
         } 
 break; 
       Case (2): 
         if (PieceCount == 3) { 
           Ans = CombosDIV(CombosDIFF(AA,BB),CC); 
-        } Else { 
+        } } else { { 
           Ans = CombosDIV(CombosDIFF(CombosADD(AA,BB),CC),DD); 
         } 
 break; 
       Case (3): 
         if (PieceCount == 3) { 
           Ans = CombosDIV(CombosMAX(AA,BB),CC); 
-        } Else { 
+        } } else { { 
           Ans = CombosDIV(CombosMAX(AA,BB,CC),DD); 
         } 
 break; 
       Case (4): 
         if (PieceCount == 3) { 
           Ans = CombosDIV(CombosMIN(AA,BB),CC); 
-        } Else { 
+        } } else { { 
           Ans = CombosDIV(CombosMIN(AA,BB,CC),DD); 
         } 
 break; 
       Case Default: 
         if (PieceCount == 2) { 
           Ans = CombosDIV(AA,BB); 
-        } Else { if (PieceCount == 3) { 
+        } } else { { if (PieceCount == 3) { 
           Ans = CombosDIV(CombosADD(AA,BB),CC); 
-        } Else { 
+        } } else { { 
           Ans = CombosDIV(CombosADD(AA,BB,CC),DD); 
         } 
 break; 
@@ -1634,7 +1634,7 @@ break;
  
  
   if (DebugCombos) { 
-     debug ('** Exit from CalcAns'); 
+     Debug ('** Exit from CalcAns'); 
   } 
  
  } // end subroutine CALCANS 
@@ -1663,7 +1663,7 @@ Subroutine ApplyBenReduction (i, k, BenVariant);
  
  
   if (DebugCombos) { 
-     debug ('** Entry into ApplyBenReduction'); 
+     Debug ('** Entry into ApplyBenReduction'); 
   } 
  
   iLimLoopAge = Min (ipMaxActAge, Max (ipMinActAge, iLoopAge)); 
@@ -1715,7 +1715,7 @@ break;
                                                                           BenefitStruct(i,k)->svcdim), 
                                                                   BenefitStruct(i,k)->svclim),  
                                                               BenefitStruct(i,k)->fxyrsc)); 
-        } Else { 
+        } } else { { 
           BenefitStruct(i,k)->ServRedPct(j, AtLoopAge) = BenefitStruct(i,k)->Ans->SvcAmt *            
                                                         Recip (Max (Dim(TCSX(BenefitStruct(i,k)->ServNum),  
                                                                       BenefitStruct(i,k)->svcdim),     
@@ -1736,7 +1736,7 @@ break;
  
     if (iLimLoopAge <= iValAge) { 
       BenefitStruct(i,k)->ServRedPct(j, AtValAge) = BenefitStruct(i,k)->ServRedPct(j, AtLoopAge); 
-    } Else { if (iLimLoopAge <= iValAge + 1) { 
+    } } else { { if (iLimLoopAge <= iValAge + 1) { 
       BenefitStruct(i,k)->ServRedPct(j, AtValAgePlus1) = BenefitStruct(i,k)->ServRedPct(j, AtLoopAge); 
     } 
  
@@ -1809,7 +1809,7 @@ break;
  
  
   if (DebugCombos) { 
-     debug ('** Exit from ApplyBenReduction'); 
+     Debug ('** Exit from ApplyBenReduction'); 
   } 
  
 } // end subroutine APPLYBENREDUCTION 
@@ -1850,7 +1850,7 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
  
  
   if (DebugCombos) { 
-     debug ('** Entry into AgeLoopAdj'); 
+     Debug ('** Entry into AgeLoopAdj'); 
   } 
  
   AnnuityType = jann(iben,itype); 
@@ -1862,7 +1862,7 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
  
   if (itype == 3) { 
     jdis = 2; 
-  } Else { 
+  } } else { { 
     jdis = 1; 
   } 
  
@@ -1870,7 +1870,7 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
 //// FAS 35 results show the Current accrual instead of the Old unit credit the need the age prior to valuation 
   if (Mayy10 == 2) { 
     CheckAgeForFAS = iValAge; 
-  } Else { 
+  } } else { { 
     CheckAgeForFAS = iValAge - 1; 
   } 
  
@@ -1881,10 +1881,10 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
  
     if (ProcessLumpSums) { 
       ConvAge = Max (iLoopAge, GetLSDeferralAge(1, iLoopAge, iben, itype, AnnuityType)); 
-    } Else { 
+    } } else { { 
       if (AnnuityType == 1) { 
         ConvAge =  iLoopAge; 
-      } Else { 
+      } } else { { 
         ConvAge = Max (iLoopAge,jdefn(iben,itype)); 
       } 
     } 
@@ -1897,10 +1897,10 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
         InterestAge = ConvAge; 
         if (iErf04(iben,itype) > 0) { 
           RedFactor = erfss(iErf04(iben,itype)); 
-        } Else { 
+        } } else { { 
           RedFactor = 1.0; 
         } 
-      } Else { 
+      } } else { { 
         RedFactor = 1.0; 
         InterestAge = iDecAge; 
         ConvAge = iDecAge; 
@@ -1920,18 +1920,18 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
  
           tefmax(iben, itype) = tefmax(iben, itype) * FormAdjFactor415(age, 5, 0, 65d0); 
  
-        } Else { 
+        } } else { { 
           jann(iben, itype) = 3; 
  
           if (maximumpass == 1) { 
              Calc415Limits(1d0, itype, iben); 
-          } Else { 
+          } } else { { 
              Calc415Limits(Gro, itype, iben); 
           } 
  
           jann(iben, itype) = AnnuityType; 
         } 
-      } Else { 
+      } } else { { 
         ConvFactor = MenuValuesCBUA(ValBenefit(iben,itype)->Ans->CBBenNum)->ConvFactors(ConvAge); 
       } 
  
@@ -1942,9 +1942,9 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
  
     if (iyieldsw > 0 && ConvAge /= iValAge) { 
       vint = vselp(ConvAge - iValAge) pow( ((iValAge - ConvAge) * Recip ((iValAge - ConvAge) * 1d0)); 
-    } Else { if (iyieldsw == 0 && iLStype(iben,itype) > 1 && ConvAge /= iLoopAge) { 
+    } } else { { if (iyieldsw == 0 && iLStype(iben,itype) > 1 && ConvAge /= iLoopAge) { 
       vint = vir(ConvAge - iLoopAge) pow( ((iLoopAge - ConvAge) * Recip ((iLoopAge - ConvAge) * 1d0)); 
-    } Else { 
+    } } else { { 
       vint = 1.0; 
     } 
  
@@ -1972,11 +1972,11 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
       if (flag(iben, itype + 1) == 1) {  !// Value comes from EPP so get it from ABen 
         ValBenefit(iben,itype)->Ans->ARETnoncb = ValBenefit(iben,itype)->Ans->ABenNonCB; 
         ValBenefit(iben,itype)->Ans->ARETcb = ValBenefit(iben,itype)->Ans->ABenCB; 
-      } Else { 
+      } } else { { 
         ValBenefit(iben,itype)->Ans->ARETnoncb = ValBenefit(iben,itype)->Ans->ProjBenNonCB; 
         ValBenefit(iben,itype)->Ans->ARETcb = ValBenefit(iben,itype)->Ans->ProjBenCB; 
       } 
-    } Else {                                    !// Allows for redefinition of ARet in EPP after the valuation age 
+    } } else { {                                    !// Allows for redefinition of ARet in EPP after the valuation age 
       ValBenefit(iben,itype)->Ans->ARETnoncb = ValBenefit(iben,itype)->Ans->ABenNonCB; 
       ValBenefit(iben,itype)->Ans->ARETcb = ValBenefit(iben,itype)->Ans->ABenCB; 
     } 
@@ -1996,12 +1996,12 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
   if (ProcessLumpSums && ValBenefit(iben,itype)->Ans->CBbalLS == 1) { 
     CBBalPct(iben,itype) = ValBenefit(iben,itype)->Ans->ProjBenCB * ValBenefit(iben,itype)->CBadjust *  
                             Recip (bft(iben,itype)); 
-  } Else { 
+  } } else { { 
     CBBalPct(iben,itype) = 0; 
   } 
  
   if (DebugCombos) { 
-     debug ('** Exit from AgeLoopAdj'); 
+     Debug ('** Exit from AgeLoopAdj'); 
   } 
  
 } // end subroutine AGELOOPADJ 
@@ -2017,7 +2017,7 @@ Subroutine SaveCBBenInfo (iben, CRETin, ARETin, HBENin, ProjBenIn);
  
  
   if (DebugCombos) { 
-     debug ('** Entry into SaveCBBenInfo'); 
+     Debug ('** Entry into SaveCBBenInfo'); 
   } 
  
   if (CBUACount > 0 && iben > 0 && Allocated(MenuValuesCBUA)) { 
@@ -2050,7 +2050,7 @@ Subroutine SaveCBBenInfo (iben, CRETin, ARETin, HBENin, ProjBenIn);
   } 
  
   if (DebugCombos) { 
-     debug ('** Exit from SaveCBBenInfo'); 
+     Debug ('** Exit from SaveCBBenInfo'); 
   } 
  
 } // end subroutine SAVECBBENINFO 
@@ -2074,7 +2074,7 @@ Subroutine SaveNonCBBenInfo (iben);
  
  
   if (DebugCombos) { 
-     debug ('** Entry into SaveNonCBBenInfo'); 
+     Debug ('** Entry into SaveNonCBBenInfo'); 
   } 
  
   BenVars(iben)->ProjBenNonCB = BEN(iben); 
@@ -2095,7 +2095,7 @@ Subroutine SaveNonCBBenInfo (iben);
 //// FAS 35 results show the Current accrual instead of the Old unit credit the need the age prior to valuation 
   if (Mayy10 == 2) { 
     CheckAgeForFAS = iValAge; 
-  } Else { 
+  } } else { { 
     CheckAgeForFAS = iValAge - 1; 
   } 
  
@@ -2107,7 +2107,7 @@ Subroutine SaveNonCBBenInfo (iben);
  
     if (iLoopAge == CheckAgeForFAS) { 
       BenVars(iben)->ARETnoncb = ABen(iben); 
-    } Else { if (iLoopAge == CheckAgeForFAS + 1) { 
+    } } else { { if (iLoopAge == CheckAgeForFAS + 1) { 
       BenVars(iben)->HBENnoncb = BenVars(iben)->ARETnoncb; 
       BenVars(iben)->CRETnoncb = Ben1(iben); 
     } 
@@ -2115,7 +2115,7 @@ Subroutine SaveNonCBBenInfo (iben);
   } 
  
   if (DebugCombos) { 
-     debug ('** Exit from SaveNonCBBenInfo'); 
+     Debug ('** Exit from SaveNonCBBenInfo'); 
   } 
  
 } // end subroutine SAVENONCBBENINFO 
@@ -2130,7 +2130,7 @@ Subroutine SaveBenInfo ();
  
  
   if (DebugCombos) { 
-     debug ('** Entry into SaveBenInfo'); 
+     Debug ('** Entry into SaveBenInfo'); 
   } 
  
   for( iben  = 1; iben  <  lcMaxBenBlks; iben  = iben  + +) {  //
@@ -2150,7 +2150,7 @@ Subroutine SaveBenInfo ();
  
  
   if (DebugCombos) { 
-     debug ('** Exit from SaveBenInfo'); 
+     Debug ('** Exit from SaveBenInfo'); 
   } 
  
 } // end subroutine SAVEBENINFO 
@@ -2174,7 +2174,7 @@ Subroutine SaveFormInfo ();
  
  
   if (DebugCombos) { 
-     debug ('** Entry into SaveFormInfo'); 
+     Debug ('** Entry into SaveFormInfo'); 
   } 
  
   for( iben  = 1; iben  <  lcMaxForms; iben  = iben  + +) {  //
@@ -2191,7 +2191,7 @@ Subroutine SaveFormInfo ();
 //// FAS 35 results show the Current accrual instead of the Old unit credit the need the age prior to valuation 
     if (Mayy10 == 2) { 
       CheckAgeForFAS = iValAge; 
-    } Else { 
+    } } else { { 
       CheckAgeForFAS = iValAge - 1; 
     } 
  
@@ -2205,7 +2205,7 @@ Subroutine SaveFormInfo ();
  
       if (iLoopAge == CheckAgeForFAS) { 
         FormVars(iben)->ARETnonCB = AFORM(iben); 
-      } Else { if (iLoopAge == CheckAgeForFAS + 1) { 
+      } } else { { if (iLoopAge == CheckAgeForFAS + 1) { 
         FormVars(iben)->HBENnonCB = FormVars(iben)->ARETnonCB; 
         FormVars(iben)->CRETnonCB = FORM1(iben); 
       } 
@@ -2215,7 +2215,7 @@ Subroutine SaveFormInfo ();
  
  
   if (DebugCombos) { 
-     debug ('** Exit from SaveFormInfo'); 
+     Debug ('** Exit from SaveFormInfo'); 
   } 
  
 } // end subroutine SAVEFORMINFO 
@@ -2231,7 +2231,7 @@ Subroutine InitBenInfoToOne (B);
  
  
   if (DebugCombos) { 
-     debug ('** Entry into InitBenInfoToOne'); 
+     Debug ('** Entry into InitBenInfoToOne'); 
   } 
  
   B->PieceType        = 1; 
@@ -2259,7 +2259,7 @@ Subroutine InitBenInfoToOne (B);
   B->CashBalERFmethod = 1; 
  
   if (DebugCombos) { 
-     debug ('** Exit from InitBenInfoToOne'); 
+     Debug ('** Exit from InitBenInfoToOne'); 
   } 
  
 } // end subroutine INITBENINFOTOONE 
@@ -2276,7 +2276,7 @@ Subroutine InitBenInfo (B, AllValues);
  
  
   if (DebugCombos) { 
-     debug ('** Entry into InitBenInfo'); 
+     Debug ('** Entry into InitBenInfo'); 
   } 
  
   if (Present (AllValues)) { 
@@ -2309,7 +2309,7 @@ Subroutine InitBenInfo (B, AllValues);
   B->SvcAmt           = 0; 
  
   if (DebugCombos) { 
-     debug ('** Exit from InitBenInfo'); 
+     Debug ('** Exit from InitBenInfo'); 
   } 
  
 } // end subroutine INITBENINFO 
@@ -2329,7 +2329,7 @@ Subroutine SetBenEqual (A, B, BenVariantIn);
  
  
   if (DebugCombos) { 
-     debug ('** Entry into SetBenEqual'); 
+     Debug ('** Entry into SetBenEqual'); 
   } 
  
   if (B->PieceType == 0) { 
@@ -2342,7 +2342,7 @@ Subroutine SetBenEqual (A, B, BenVariantIn);
  
   if (Present (BenVariantIn)) { 
     BenVariant = BenVariantIn; 
-  } Else { 
+  } } else { { 
     BenVariant = 9; 
   } 
  
@@ -2400,7 +2400,7 @@ break;
   B->CashBalERFmethod = A->CashBalERFmethod; 
  
   if (DebugCombos) { 
-     debug ('** Exit from SetBenEqual'); 
+     Debug ('** Exit from SetBenEqual'); 
   } 
  
 } // end subroutine SETBENEQUAL 
@@ -2420,7 +2420,7 @@ Function CombosADD(A, B, C, D) Result (result) {
  
  
   if (DebugCombos) { 
-     debug ('** Entry into CombosADD'); 
+     Debug ('** Entry into CombosADD'); 
   } 
  
   StartWith = ''; 
@@ -2436,7 +2436,7 @@ Function CombosADD(A, B, C, D) Result (result) {
       if (StartWith == '') { 
          SetBenEqual(B, result); 
         StartWith = 'B'; 
-      } Else { 
+      } } else { { 
         result = AddBenInfo(result, B); 
       } 
     } 
@@ -2447,7 +2447,7 @@ Function CombosADD(A, B, C, D) Result (result) {
       if (StartWith == '') { 
          SetBenEqual(C, result); 
         StartWith = 'C'; 
-      } Else { 
+      } } else { { 
         result = AddBenInfo(result, C); 
       } 
     } 
@@ -2458,14 +2458,14 @@ Function CombosADD(A, B, C, D) Result (result) {
       if (StartWith == '') { 
          SetBenEqual(D, result); 
         StartWith = 'D'; 
-      } Else { 
+      } } else { { 
         result = AddBenInfo(result, D); 
       } 
     } 
   } 
  
   if (DebugCombos) { 
-     debug ('** Exit from CombosADD'); 
+     Debug ('** Exit from CombosADD'); 
   } 
  
 } // end function COMBOSADD 
@@ -2481,7 +2481,7 @@ Function AddBenInfo(A, B) Result (result) {
  
  
   if (DebugCombos) { 
-     debug ('** Entry into AddBenInfo'); 
+     Debug ('** Entry into AddBenInfo'); 
   } 
    InitBenInfo(result, true); 
  
@@ -2520,7 +2520,7 @@ Function AddBenInfo(A, B) Result (result) {
     result->CBbalLS = A->CBbalLS; 
     result->BALICR = A->BALICR; 
     result->SvcAmt = A->SvcAmt; 
-  } Else { 
+  } } else { { 
     if (result->PieceType == 0) { 
       result->PieceType = B->PieceType; 
     } 
@@ -2537,7 +2537,7 @@ Function AddBenInfo(A, B) Result (result) {
   } 
  
   if (DebugCombos) { 
-     debug ('** Exit from AddBenInfo'); 
+     Debug ('** Exit from AddBenInfo'); 
   } 
  
 } // end function ADDBENINFO 
@@ -2555,7 +2555,7 @@ Function CombosDIFF(A, B) Result (result) {
  
  
   if (DebugCombos) { 
-     debug ('** Entry into CombosDIFF'); 
+     Debug ('** Entry into CombosDIFF'); 
   } 
  
    InitBenInfo(result, true); 
@@ -2595,7 +2595,7 @@ Function CombosDIFF(A, B) Result (result) {
     result->CBbalLS = A->CBbalLS; 
     result->BALICR = A->BALICR; 
     result->SvcAmt = A->SvcAmt; 
-  } Else { 
+  } } else { { 
     if (result->PieceType == 0) { 
       result->PieceType = B->PieceType; 
     } 
@@ -2612,7 +2612,7 @@ Function CombosDIFF(A, B) Result (result) {
   } 
  
   if (DebugCombos) { 
-     debug ('** Exit from CombosDIFF'); 
+     Debug ('** Exit from CombosDIFF'); 
   } 
  
 } // end function COMBOSDIFF 
@@ -2632,7 +2632,7 @@ Function CombosMAX(A, B, C, D) Result (result) {
  
  
   if (DebugCombos) { 
-     debug ('** Entry into CombosMAX'); 
+     Debug ('** Entry into CombosMAX'); 
   } 
  
   StartWith = ''; 
@@ -2648,7 +2648,7 @@ Function CombosMAX(A, B, C, D) Result (result) {
       if (StartWith == '') { 
          SetBenEqual(B, result); 
         StartWith = 'B'; 
-      } Else { 
+      } } else { { 
         result = MaxBenInfo(result, B); 
       } 
     } 
@@ -2659,7 +2659,7 @@ Function CombosMAX(A, B, C, D) Result (result) {
       if (StartWith == '') { 
          SetBenEqual(C, result); 
         StartWith = 'C'; 
-      } Else { 
+      } } else { { 
         result = MaxBenInfo(result, C); 
       } 
     } 
@@ -2670,14 +2670,14 @@ Function CombosMAX(A, B, C, D) Result (result) {
       if (StartWith == '') { 
          SetBenEqual(D, result); 
         StartWith = 'D'; 
-      } Else { 
+      } } else { { 
         result = MaxBenInfo(result, D); 
       } 
     } 
   } 
  
   if (DebugCombos) { 
-     debug ('** Exit from CombosMAX'); 
+     Debug ('** Exit from CombosMAX'); 
   } 
  
 } // end function COMBOSMAX 
@@ -2695,7 +2695,7 @@ Function MaxBenInfo(A, B) Result (result) {
  
  
   if (DebugCombos) { 
-     debug ('** Entry into MaxBenInfo'); 
+     Debug ('** Entry into MaxBenInfo'); 
   } 
  
    InitBenInfo(result, true); 
@@ -2703,7 +2703,7 @@ Function MaxBenInfo(A, B) Result (result) {
   if (A->ARETcb + A->ARETNonCB > B->ARETcb + B->ARETNonCB - 0.0001d0) { 
     result->ARETcb = A->ARETcb; 
     result->ARETNoncb = A->ARETNoncb; 
-  } Else { 
+  } } else { { 
     result->ARETcb = B->ARETcb; 
     result->ARETNoncb = B->ARETNoncb; 
   } 
@@ -2711,7 +2711,7 @@ Function MaxBenInfo(A, B) Result (result) {
   if (A->CRETcb + A->CRETNonCB > B->CRETcb + B->CRETNonCB - 0.0001d0) { 
     result->CRETcb = A->CRETcb; 
     result->CRETNoncb = A->CRETNoncb; 
-  } Else { 
+  } } else { { 
     result->CRETcb = B->CRETcb; 
     result->CRETNoncb = B->CRETNoncb; 
   } 
@@ -2719,7 +2719,7 @@ Function MaxBenInfo(A, B) Result (result) {
   if (A->HBENcb + A->HBENNonCB > B->HBENcb + B->HBENNonCB - 0.0001d0) { 
     result->HBENcb = A->HBENcb; 
     result->HBENNoncb = A->HBENNoncb; 
-  } Else { 
+  } } else { { 
     result->HBENcb = B->HBENcb; 
     result->HBENNoncb = B->HBENNoncb; 
   } 
@@ -2727,7 +2727,7 @@ Function MaxBenInfo(A, B) Result (result) {
   if (A->ProjBencb + A->ProjBenNonCB > B->ProjBencb + B->ProjBenNonCB - 0.0001d0) { 
     result->ProjBencb = A->ProjBencb; 
     result->ProjBenNoncb = A->ProjBenNoncb; 
-  } Else { 
+  } } else { { 
     result->ProjBencb = B->ProjBencb; 
     result->ProjBenNoncb = B->ProjBenNoncb; 
   } 
@@ -2735,7 +2735,7 @@ Function MaxBenInfo(A, B) Result (result) {
   if (A->Ben0cb + A->Ben0NonCB > B->Ben0cb + B->Ben0NonCB - 0.0001d0) { 
     result->Ben0cb = A->Ben0cb; 
     result->Ben0Noncb = A->Ben0Noncb; 
-  } Else { 
+  } } else { { 
     result->Ben0cb = B->Ben0cb; 
     result->Ben0Noncb = B->Ben0Noncb; 
   } 
@@ -2743,7 +2743,7 @@ Function MaxBenInfo(A, B) Result (result) {
   if (A->Ben1cb + A->Ben1NonCB > B->Ben1cb + B->Ben1NonCB - 0.0001d0) { 
     result->Ben1cb = A->Ben1cb; 
     result->Ben1Noncb = A->Ben1Noncb; 
-  } Else { 
+  } } else { { 
     result->Ben1cb = B->Ben1cb; 
     result->Ben1Noncb = B->Ben1Noncb; 
   } 
@@ -2751,7 +2751,7 @@ Function MaxBenInfo(A, B) Result (result) {
   if (A->ABencb + A->ABenNonCB > B->ABencb + B->ABenNonCB - 0.0001d0) { 
     result->ABencb = A->ABencb; 
     result->ABenNoncb = A->ABenNoncb; 
-  } Else { 
+  } } else { { 
     result->ABencb = B->ABencb; 
     result->ABenNoncb = B->ABenNoncb; 
   } 
@@ -2759,7 +2759,7 @@ Function MaxBenInfo(A, B) Result (result) {
   if (A->BenZcb + A->BenZNonCB > B->BenZcb + B->BenZNonCB - 0.0001d0) { 
     result->BenZcb = A->BenZcb; 
     result->BenZNoncb = A->BenZNoncb; 
-  } Else { 
+  } } else { { 
     result->BenZcb = B->BenZcb; 
     result->BenZNoncb = B->BenZNoncb; 
   } 
@@ -2779,7 +2779,7 @@ Function MaxBenInfo(A, B) Result (result) {
     result->CBbalLS = A->CBbalLS; 
     result->BALICR = A->BALICR; 
     result->SvcAmt = A->SvcAmt; 
-  } Else { 
+  } } else { { 
     if (result->PieceType == 0) { 
       result->PieceType = B->PieceType; 
     } 
@@ -2796,7 +2796,7 @@ Function MaxBenInfo(A, B) Result (result) {
   } 
  
   if (DebugCombos) { 
-     debug ('** Exit from MaxBenInfo'); 
+     Debug ('** Exit from MaxBenInfo'); 
   } 
  
 } // end function MAXBENINFO 
@@ -2816,7 +2816,7 @@ Function CombosMIN(A, B, C, D) Result (result) {
  
  
   if (DebugCombos) { 
-     debug ('** Entry into CombosMIN'); 
+     Debug ('** Entry into CombosMIN'); 
   } 
  
   StartWith = ''; 
@@ -2832,7 +2832,7 @@ Function CombosMIN(A, B, C, D) Result (result) {
       if (StartWith == '') { 
          SetBenEqual(B, result); 
         StartWith = 'B'; 
-      } Else { 
+      } } else { { 
         result = MinBenInfo(result, B); 
       } 
     } 
@@ -2843,7 +2843,7 @@ Function CombosMIN(A, B, C, D) Result (result) {
       if (StartWith == '') { 
          SetBenEqual(C, result); 
         StartWith = 'C'; 
-      } Else { 
+      } } else { { 
         result = MinBenInfo(result, C); 
       } 
     } 
@@ -2854,14 +2854,14 @@ Function CombosMIN(A, B, C, D) Result (result) {
       if (StartWith == '') { 
          SetBenEqual(D, result); 
         StartWith = 'D'; 
-      } Else { 
+      } } else { { 
         result = MinBenInfo(result, D); 
       } 
     } 
   } 
  
   if (DebugCombos) { 
-     debug ('** Exit from CombosMIN'); 
+     Debug ('** Exit from CombosMIN'); 
   } 
  
  } // end function COMBOSMIN 
@@ -2879,7 +2879,7 @@ Function MinBenInfo(A, B) Result (result) {
  
  
   if (DebugCombos) { 
-     debug ('** Entry into MinBenInfo'); 
+     Debug ('** Entry into MinBenInfo'); 
   } 
  
    InitBenInfo(result, true); 
@@ -2887,7 +2887,7 @@ Function MinBenInfo(A, B) Result (result) {
   if (A->ARETcb + A->ARETNonCB < B->ARETcb + B->ARETNonCB - 0.0001d0) { 
     result->ARETcb = A->ARETcb; 
     result->ARETNoncb = A->ARETNoncb; 
-  } Else { 
+  } } else { { 
     result->ARETcb = B->ARETcb; 
     result->ARETNoncb = B->ARETNoncb; 
   } 
@@ -2895,7 +2895,7 @@ Function MinBenInfo(A, B) Result (result) {
   if (A->CRETcb + A->CRETNonCB < B->CRETcb + B->CRETNonCB - 0.0001d0) { 
     result->CRETcb = A->CRETcb; 
     result->CRETNoncb = A->CRETNoncb; 
-  } Else { 
+  } } else { { 
     result->CRETcb = B->CRETcb; 
     result->CRETNoncb = B->CRETNoncb; 
   } 
@@ -2903,7 +2903,7 @@ Function MinBenInfo(A, B) Result (result) {
   if (A->HBENcb + A->HBENNonCB < B->HBENcb + B->HBENNonCB - 0.0001d0) { 
     result->HBENcb = A->HBENcb; 
     result->HBENNoncb = A->HBENNoncb; 
-  } Else { 
+  } } else { { 
     result->HBENcb = B->HBENcb; 
     result->HBENNoncb = B->HBENNoncb; 
   } 
@@ -2911,7 +2911,7 @@ Function MinBenInfo(A, B) Result (result) {
   if (A->ProjBencb + A->ProjBenNonCB < B->ProjBencb + B->ProjBenNonCB - 0.0001d0) { 
     result->ProjBencb = A->ProjBencb; 
     result->ProjBenNoncb = A->ProjBenNoncb; 
-  } Else { 
+  } } else { { 
     result->ProjBencb = B->ProjBencb; 
     result->ProjBenNoncb = B->ProjBenNoncb; 
   } 
@@ -2919,7 +2919,7 @@ Function MinBenInfo(A, B) Result (result) {
   if (A->Ben0cb + A->Ben0NonCB < B->Ben0cb + B->Ben0NonCB - 0.0001d0) { 
     result->Ben0cb = A->Ben0cb; 
     result->Ben0Noncb = A->Ben0Noncb; 
-  } Else { 
+  } } else { { 
     result->Ben0cb = B->Ben0cb; 
     result->Ben0Noncb = B->Ben0Noncb; 
   } 
@@ -2927,7 +2927,7 @@ Function MinBenInfo(A, B) Result (result) {
   if (A->Ben1cb + A->Ben1NonCB < B->Ben1cb + B->Ben1NonCB - 0.0001d0) { 
     result->Ben1cb = A->Ben1cb; 
     result->Ben1Noncb = A->Ben1Noncb; 
-  } Else { 
+  } } else { { 
     result->Ben1cb = B->Ben1cb; 
     result->Ben1Noncb = B->Ben1Noncb; 
   } 
@@ -2935,7 +2935,7 @@ Function MinBenInfo(A, B) Result (result) {
   if (A->ABencb + A->ABenNonCB < B->ABencb + B->ABenNonCB - 0.0001d0) { 
     result->ABencb = A->ABencb; 
     result->ABenNoncb = A->ABenNoncb; 
-  } Else { 
+  } } else { { 
     result->ABencb = B->ABencb; 
     result->ABenNoncb = B->ABenNoncb; 
   } 
@@ -2943,7 +2943,7 @@ Function MinBenInfo(A, B) Result (result) {
   if (A->BenZcb + A->BenZNonCB < B->BenZcb + B->BenZNonCB - 0.0001d0) { 
     result->BenZcb = A->BenZcb; 
     result->BenZNoncb = A->BenZNoncb; 
-  } Else { 
+  } } else { { 
     result->BenZcb = B->BenZcb; 
     result->BenZNoncb = B->BenZNoncb; 
   } 
@@ -2963,7 +2963,7 @@ Function MinBenInfo(A, B) Result (result) {
     result->CBbalLS = A->CBbalLS; 
     result->BALICR = A->BALICR; 
     result->SvcAmt = A->SvcAmt; 
-  } Else { 
+  } } else { { 
     if (result->PieceType == 0) { 
       result->PieceType = B->PieceType; 
     } 
@@ -2980,7 +2980,7 @@ Function MinBenInfo(A, B) Result (result) {
   } 
  
   if (DebugCombos) { 
-     debug ('** Exit from MinBenInfo'); 
+     Debug ('** Exit from MinBenInfo'); 
   } 
  
 } // end function MINBENINFO 
@@ -3000,7 +3000,7 @@ Function CombosMULT(A, B, C, D) Result (result) {
  
  
   if (DebugCombos) { 
-     debug ('** Entry into CombosMULT'); 
+     Debug ('** Entry into CombosMULT'); 
   } 
  
 //// Need to set the result to be equal to the first non-zero benefit component.  Us 
@@ -3020,7 +3020,7 @@ Function CombosMULT(A, B, C, D) Result (result) {
     if (B->BenNum /= 0) { 
       if (ResultInitialized) { 
         result = MultBenInfo(result,B); 
-      } Else { 
+      } } else { { 
          SetBenEqual(B, result); 
         ResultInitialized = true; 
       } 
@@ -3031,7 +3031,7 @@ Function CombosMULT(A, B, C, D) Result (result) {
     if (C->BenNum /= 0) { 
       if (ResultInitialized) { 
         result = MultBenInfo(result,C); 
-      } Else { 
+      } } else { { 
          SetBenEqual(C, result); 
         ResultInitialized = true; 
       } 
@@ -3042,7 +3042,7 @@ Function CombosMULT(A, B, C, D) Result (result) {
     if (D->BenNum /= 0) { 
       if (ResultInitialized) { 
         result = MultBenInfo(result,D); 
-      } Else { 
+      } } else { { 
          SetBenEqual(D, result); 
         ResultInitialized = true; 
       } 
@@ -3050,7 +3050,7 @@ Function CombosMULT(A, B, C, D) Result (result) {
   } 
  
   if (DebugCombos) { 
-     debug ('** Exit from CombosMULT'); 
+     Debug ('** Exit from CombosMULT'); 
   } 
  
 } // end function COMBOSMULT 
@@ -3069,7 +3069,7 @@ Function MultBenInfo(A, B) Result (result) {
  
  
   if (DebugCombos) { 
-     debug ('** Entry into MultBenInfo'); 
+     Debug ('** Entry into MultBenInfo'); 
   } 
  
    InitBenInfo(result, true); 
@@ -3130,7 +3130,7 @@ Function MultBenInfo(A, B) Result (result) {
     result->CBbalLS = A->CBbalLS; 
     result->BALICR = A->BALICR; 
     result->SvcAmt = A->SvcAmt; 
-  } Else { 
+  } } else { { 
     if (result->PieceType == 0) { 
       result->PieceType = B->PieceType; 
     } 
@@ -3148,7 +3148,7 @@ Function MultBenInfo(A, B) Result (result) {
  
  
   if (DebugCombos) { 
-     debug ('** Exit from MultBenInfo'); 
+     Debug ('** Exit from MultBenInfo'); 
   } 
  
 } // end function MULTBENINFO 
@@ -3167,7 +3167,7 @@ Function CombosDIV(A, B) Result (result) {
  
  
   if (DebugCombos) { 
-     debug ('** Entry into CombosDIV'); 
+     Debug ('** Entry into CombosDIV'); 
   } 
  
    InitBenInfo(result, true); 
@@ -3213,7 +3213,7 @@ Function CombosDIV(A, B) Result (result) {
     result->CBbalLS = A->CBbalLS; 
     result->BALICR = A->BALICR; 
     result->SvcAmt = A->SvcAmt; 
-  } Else { 
+  } } else { { 
     if (result->PieceType == 0) { 
       result->PieceType = B->PieceType; 
     } 
@@ -3230,7 +3230,7 @@ Function CombosDIV(A, B) Result (result) {
   } 
  
   if (DebugCombos) { 
-     debug ('** Exit from CombosDIV'); 
+     Debug ('** Exit from CombosDIV'); 
   } 
  
 } // end function COMBOSDIV 
