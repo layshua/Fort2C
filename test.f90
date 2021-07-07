@@ -1,3 +1,11 @@
+Do k = 1, Ubound (BenefitStruct,2)                      ! Combs, ValBens(Ret,Dth,Dis,Wth)
+    Do i = 1, Ubound (BenefitStruct,1)
+      Call InitBenInfo(BenefitStruct(i,k)%Ans, AllValues=.true.)
+      Do j = 1, 4
+        Call InitBenInfo(BenefitStruct(i,k)%Piece(j), AllValues=.true.)
+      End Do  ! j
+
+ Call lverror('AllocateComboStructures', 1, iastat,'Error allocating BenefitStruct array.','');
           Select Case (Trim (bentype))
           Case ('BENEFIT')
             ibentype = 1

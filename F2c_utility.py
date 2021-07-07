@@ -223,6 +223,9 @@ def proc_mathOperators(fortline):
         result = fortline.replace("aint", "trunc")
     if(fortline.find(" ** ")> -1):
         result = fortline.replace("**", "pow(")
+    if fortline.find('Abs') > -1:
+        result = fortline.replace("Abs", "abs")
+
     return result
 
 
@@ -242,7 +245,7 @@ def proc_LogicalOperators(fortline):
     fortline = fortline.replace('else', '} else {')
     fortline = fortline.replace('endif', '}')
     fortline = fortline.replace('End If', '}')
-    fortline = fortline.replace(' call ', '')
+    fortline = fortline.replace('call ', '')
     fortline = fortline.replace('Call', '')
     fortline = fortline.replace('%', '->')
     fortline = proc_mathOperators(fortline)
@@ -274,16 +277,30 @@ def proc_LogicalOperators(fortline):
 
 
 def proc_doloop(fortline):
-    forloopvariables = fortline.split("=")
+    comment_idx = fortline.find('!')
+    fortline_minus_comment = fortline[0: comment_idx]
+    forloopvariables = fortline_minus_comment.split("=")
+    forloopvariables[1] = forloopvariables[1].rstrip()
     forloopvariables[1] = forloopvariables[1].replace('\n', '')
-    forlooplimits = forloopvariables[1].split(',')
-    i_var = forloopvariables[0].replace("do", '');
+    forlooplimits = forloopvariables[1].split(', ')
+    i_var = forloopvariables[0].replace("do", '')
+    i_var = forloopvariables[0].replace("Do", '')
     i_var = i_var.lstrip()
     i_equal = forlooplimits[0]
     i_range = forlooplimits[1]
-    i_incr = forlooplimits[2]
+    if (len(forlooplimits)>2):
+      i_incr = forlooplimits[2]
+    else:
+      i_incr = '1'
     #LV_print(i_equal, i_range, i_incr)
-    LV_print("   for( ", i_var, " =", i_equal, "; ", i_var, " < ", i_range, "; ", i_var, " = ", i_var, " + ", i_incr, ")")
+    istartIdx =  fortline_minus_comment.find('Do')
+    if istartIdx == -1:
+        istartIdx = fortline_minus_comment.find('do')
+    lpad     = fortline[0: istartIdx]
+    result = (lpad+"for( "+ i_var+ " ="+ i_equal+ "; "+ i_var+ " < "+ i_range+ "; "+ i_var +" = "+ i_var+ " + "+ i_incr+ ") {")
+    result = result.replace('!', '')
+    result = fortline.replace(fortline_minus_comment, result)
+    LV_print(result)
 
 
 
@@ -354,7 +371,7 @@ for declline in sFil:
                     LV_print(result)
                 elif len(a.lstrip()) > 0:
                     if a.find("while") < 0:
-                        if a.lstrip()[0:2] == 'do':
+                        if a.lstrip()[0:2] in ['do', 'Do', 'DO']:
                             proc_doloop(declline)
                         else:
                             proc_LogicalOperators(declline)
