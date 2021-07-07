@@ -255,6 +255,8 @@ def proc_LogicalOperators(fortline):
         fortline = fortline.upper().replace('END DO', '} //end do loop')
     elif (fortline.find('&') == len(fortline)-2):
         fortline = fortline.replace('&', '').replace('\n','')
+    elif (fortline.find('0d0') >  -1):
+        fortline = fortline.replace('0d0', '0').replace('\n',';')
 
     else:
         if fortline.find(';') < 0:

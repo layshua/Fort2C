@@ -34,9 +34,9 @@ int *flag ;//Allocatable, Dimension(:, :),
     } //end do loop  ! k
  
  
-    ARETXnonCB = 0d0; 
-    CRETXnonCB = 0d0; 
-    HBENnonCB  = 0d0; 
+    ARETXnonCB = 0; 
+    CRETXnonCB = 0; 
+    HBENnonCB  = 0; 
  
  
  
@@ -313,9 +313,9 @@ Contains;
   BenefitStruct->CombineEquiv = 0; 
   BenefitStruct->BenEquiv = 0; 
   BenefitStruct->ServRed = 0; 
-  BenefitStruct->svcdim = 0d0; 
-  BenefitStruct->svclim = 0d0; 
-  BenefitStruct->fxyrsc = 0d0; 
+  BenefitStruct->svcdim = 0; 
+  BenefitStruct->svclim = 0; 
+  BenefitStruct->fxyrsc = 0; 
   BenefitStruct->ServNum = 0; 
   BenefitStruct->BenEquivNum = 0; 
   BenefitStruct->bentype = 0; 
@@ -371,10 +371,10 @@ Contains;
       CombType = 0; 
       CombSubType = 0; 
       ServRed = 0; 
-      benpct = 0d0; 
-      svcdim = 0d0; 
-      svclim = 0d0; 
-      fxyrsc = 0d0; 
+      benpct = 0; 
+      svcdim = 0; 
+      svclim = 0; 
+      fxyrsc = 0; 
  
 //// Need the switch label, too 
       Switch = Trim (mendescrip(k,1)) // '(' // Trim (IntToStr(i, 3)) // ')'; 
@@ -411,10 +411,10 @@ Contains;
  
 //// If user leaves BenPct blank, it is assumed BenPct is 100 
       if (abs (BenPct) < 0.0011d0) { 
-        BenPct = 100d0; 
+        BenPct = 100; 
       } 
  
-      BenefitStruct(i,k)->BenPct = BenPct / 100d0; 
+      BenefitStruct(i,k)->BenPct = BenPct / 100; 
  
       if (k > 1) { 
         if (!  GetMenuItem(MenDescrip(k,10),CombineEquiv,i)) { 
@@ -701,9 +701,9 @@ break;
     } //end do loop  ! k
  
  
-    ARETXnonCB = 0d0; 
-    CRETXnonCB = 0d0; 
-    HBENnonCB  = 0d0; 
+    ARETXnonCB = 0; 
+    CRETXnonCB = 0; 
+    HBENnonCB  = 0; 
  
     if (DebugCombos) { 
        debug ('** Exit from InitializeCombArrays'); 
@@ -789,9 +789,9 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
 //// Arrays UseFld35 and Fld35 are only Allocated if UseFas35Overrides is tru 
       if (UseFld35(k-1, i)) { 
         ValBenefit(i, k-1)->Ans->ABenNonCB = Fld35(k-1, i); 
-        ValBenefit(i, k-1)->Ans->ABenCB    = 0d0; 
+        ValBenefit(i, k-1)->Ans->ABenCB    = 0; 
         ValBenefit(i, k-1)->Ans->ARetNonCB = Fld35(k-1, i); 
-        ValBenefit(i, k-1)->Ans->ARetCB    = 0d0; 
+        ValBenefit(i, k-1)->Ans->ARetCB    = 0; 
         ARETXnonCB(i, k-1) = ValBenefit(i, k-1)->Ans->ARetNonCB; 
         ARetx(i, k-1) = ARETXnonCB(i, k-1); 
         Cycle; 
@@ -1025,7 +1025,7 @@ Subroutine CombFinal (CombEquivType);
  
       if (abs (BenefitStruct(i,1)->Ans->ProjBenNonCB + BenefitStruct(i,1)->Ans->ProjBenCB - COMB(i)) > 0.001d0) { 
         BenefitStruct(i,1)->Ans->ProjBenNonCB = COMB(i); 
-        BenefitStruct(i,1)->Ans->ProjBenCB = 0d0; 
+        BenefitStruct(i,1)->Ans->ProjBenCB = 0; 
       } 
     } //end do loop  ! i
  
@@ -1067,7 +1067,7 @@ Subroutine CombFinal (CombEquivType);
             if (NonCBOnly) { 
               flag(i,k) = 1; 
               BenefitStruct(i,k)->Ans->ProjBenNonCB = bft(i, k-1); 
-              BenefitStruct(i,k)->Ans->ProjBenCB = 0d0; 
+              BenefitStruct(i,k)->Ans->ProjBenCB = 0; 
             } 
           } 
         } 
@@ -1176,7 +1176,7 @@ Subroutine CombFinalFAS (BenVariant);
  
         if (abs (CurrValue - NewValue) > 0.001d0) { 
           BenefitStruct(i,k)->Ans->Ben0nonCB = NewValue; 
-          BenefitStruct(i,k)->Ans->Ben0CB = 0d0; 
+          BenefitStruct(i,k)->Ans->Ben0CB = 0; 
  
           if (k > Combs ) { 
             flag(i,k) = 1; 
@@ -1195,7 +1195,7 @@ break;
  
         if (abs (CurrValue - NewValue) > 0.001d0) { 
           BenefitStruct(i,k)->Ans->Ben1nonCB = NewValue; 
-          BenefitStruct(i,k)->Ans->Ben1CB = 0d0; 
+          BenefitStruct(i,k)->Ans->Ben1CB = 0; 
  
           if (k > Combs ) { 
             flag(i,k) = 1; 
@@ -1214,7 +1214,7 @@ break;
  
         if (abs (CurrValue - NewValue) > 0.001d0) { 
           BenefitStruct(i,k)->Ans->ABennonCB = NewValue; 
-          BenefitStruct(i,k)->Ans->ABenCB = 0d0; 
+          BenefitStruct(i,k)->Ans->ABenCB = 0; 
  
           if (k > Combs ) { 
             flag(i,k) = 1; 
@@ -1246,7 +1246,7 @@ break;
  
         if (abs (CurrValue - NewValue) > 0.001d0) { 
           BenefitStruct(i,k)->Ans->BenZnonCB = NewValue; 
-          BenefitStruct(i,k)->Ans->BenZCB = 0d0; 
+          BenefitStruct(i,k)->Ans->BenZCB = 0; 
  
           if (k > Combs ) { 
             flag(i,k) = 1; 
@@ -1854,7 +1854,7 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
   } 
  
   AnnuityType = jann(iben,itype); 
-  ValBenefit(iben,itype)->CBadjust = 1.0d0; 
+  ValBenefit(iben,itype)->CBadjust = 1.0; 
  
   if (AnnuityType == 0) { 
     Return; 
@@ -1898,17 +1898,17 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
         if (iErf04(iben,itype) > 0) { 
           RedFactor = erfss(iErf04(iben,itype)); 
         } Else { 
-          RedFactor = 1.0d0; 
+          RedFactor = 1.0; 
         } 
       } Else { 
-        RedFactor = 1.0d0; 
+        RedFactor = 1.0; 
         InterestAge = iDecAge; 
         ConvAge = iDecAge; 
       } 
  
       if (ProcessLumpSums && ValBenefit(iben,itype)->Ans->CBbalLS == 1) { 
 //// Cash Balance is not being converte 
-        ConvFactor = 1.0d0; 
+        ConvFactor = 1.0; 
  
 //// need to recalculate the 415 limit to be a lump sum instead of annuit 
 //// Temporarily set the annuity type to lump sum then recalculate 415 for this benefi 
@@ -1945,7 +1945,7 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
     } Else { if (iyieldsw == 0 && iLStype(iben,itype) > 1 && ConvAge /= iLoopAge) { 
       vint = vir(ConvAge - iLoopAge) pow( ((iLoopAge - ConvAge) * Recip ((iLoopAge - ConvAge) * 1d0)); 
     } Else { 
-      vint = 1.0d0; 
+      vint = 1.0; 
     } 
  
     CBBalDis(iben,itype) = tPx * vint; 
@@ -1997,7 +1997,7 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
     CBBalPct(iben,itype) = ValBenefit(iben,itype)->Ans->ProjBenCB * ValBenefit(iben,itype)->CBadjust *  
                             Recip (bft(iben,itype)); 
   } Else { 
-    CBBalPct(iben,itype) = 0d0; 
+    CBBalPct(iben,itype) = 0; 
   } 
  
   if (DebugCombos) { 
@@ -2080,7 +2080,7 @@ Subroutine SaveNonCBBenInfo (iben);
   BenVars(iben)->ProjBenNonCB = BEN(iben); 
  
   if (Product == 'LVADMIN') { 
-    BenVars(iben)->ProjBenCB = 0d0; 
+    BenVars(iben)->ProjBenCB = 0; 
   } 
  
   if (BenVars(iben)->PieceType == 0) { 
@@ -2289,24 +2289,24 @@ Subroutine InitBenInfo (B, AllValues);
     } 
   } 
  
-  B->CRETnoncb        = 0d0; 
-  B->CRETcb           = 0d0; 
-  B->HBENnoncb        = 0d0; 
-  B->HBENcb           = 0d0; 
-  B->ARETnoncb        = 0d0; 
-  B->ARETcb           = 0d0; 
-  B->ProjBenNonCB     = 0d0; 
-  B->ProjBenCB        = 0d0; 
-  B->BALICR           = 0d0; 
-  B->Ben0CB           = 0d0; 
-  B->Ben0nonCB        = 0d0; 
-  B->Ben1CB           = 0d0; 
-  B->Ben1nonCB        = 0d0; 
-  B->BenZCB           = 0d0; 
-  B->BenZnonCB        = 0d0; 
-  B->ABenCB           = 0d0; 
-  B->ABennonCB        = 0d0; 
-  B->SvcAmt           = 0d0; 
+  B->CRETnoncb        = 0; 
+  B->CRETcb           = 0; 
+  B->HBENnoncb        = 0; 
+  B->HBENcb           = 0; 
+  B->ARETnoncb        = 0; 
+  B->ARETcb           = 0; 
+  B->ProjBenNonCB     = 0; 
+  B->ProjBenCB        = 0; 
+  B->BALICR           = 0; 
+  B->Ben0CB           = 0; 
+  B->Ben0nonCB        = 0; 
+  B->Ben1CB           = 0; 
+  B->Ben1nonCB        = 0; 
+  B->BenZCB           = 0; 
+  B->BenZnonCB        = 0; 
+  B->ABenCB           = 0; 
+  B->ABennonCB        = 0; 
+  B->SvcAmt           = 0; 
  
   if (DebugCombos) { 
      debug ('** Exit from InitBenInfo'); 
