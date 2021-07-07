@@ -166,7 +166,7 @@ Contains;
     iastat = 0; 
     if (! Allocated(BenefitStruct)) { 
       Allocate (BenefitStruct(Max (Max (9,MaxBens),MaxCombs),5),stat=iastat); 
-      if (iastat /= 0) { 
+      if (iastat != 0) { 
          lverror('AllocateComboStructures', 1, iastat,'Error allocating BenefitStruct array.','');
  
         Return; 
@@ -179,7 +179,7 @@ Contains;
     if (! Allocated(BenVars)) { 
       lcMaxBenBlks = Ubound (ben,1); 
       Allocate (BenVars(lcMaxBenBlks),stat=iastat); 
-      if (iastat /= 0) { 
+      if (iastat != 0) { 
          lverror('AllocateComboStructures', 1, iastat,'Error allocating BenVars array.','');
  
         Return; 
@@ -189,7 +189,7 @@ Contains;
     if (! Allocated(FormVars)) { 
       lcMaxForms = Ubound (form,1); 
       Allocate (FormVars(lcMaxForms),stat=iastat); 
-      if (iastat /= 0) { 
+      if (iastat != 0) { 
          lverror('AllocateComboStructures', 1, iastat,'Error allocating FormVars array.','');
  
         Return; 
@@ -200,7 +200,7 @@ Contains;
  
     if (! Allocated(ARETXnonCB)) { 
       Allocate (ARETXnonCB(Max (9,MaxBens), 4),stat=iastat); 
-      if (iastat /= 0) { 
+      if (iastat != 0) { 
          lverror('AllocateComboStructures', 1, iastat,'Error allocating ARETXnonCB array.','');
  
         Return; 
@@ -209,7 +209,7 @@ Contains;
  
     if (! Allocated(CRETXnonCB)) { 
       Allocate (CRETXnonCB(Max (9,MaxBens), 4),stat=iastat); 
-      if (iastat /= 0) { 
+      if (iastat != 0) { 
          lverror('AllocateComboStructures', 1, iastat,'Error allocating CRETXnonCB array.','');
  
         Return; 
@@ -218,7 +218,7 @@ Contains;
  
     if (! Allocated(HBENnonCB)) { 
       Allocate (HBENnonCB(Max (9,MaxBens), 4),stat=iastat); 
-      if (iastat /= 0) { 
+      if (iastat != 0) { 
          lverror('AllocateComboStructures', 1, iastat,'Error allocating HBENnonCB array.','');
  
         Return; 
@@ -227,7 +227,7 @@ Contains;
  
     if (! Allocated(flag)) { 
       Allocate (flag(Max (9, MaxBens, lcMaxCombs), 5),stat=iastat); 
-      if (iastat /= 0) { 
+      if (iastat != 0) { 
          lverror('AllocateComboStructures', 1, iastat,'Error allocating flag array.','');
  
         Return; 
@@ -247,7 +247,7 @@ Contains;
  
       if (! Allocated(Fld35)) { 
         Allocate (Fld35(4, Max (9,MaxBens)),stat=iastat); 
-        if (iastat /= 0) { 
+        if (iastat != 0) { 
            lverror('AllocateComboStructures', 1, iastat,'Error allocating Fld35 array.','');
  
           Return; 
@@ -256,7 +256,7 @@ Contains;
  
       if (! Allocated(UseFld35)) { 
         Allocate (UseFld35(4, Max (9,MaxBens)),stat=iastat); 
-        if (iastat /= 0) { 
+        if (iastat != 0) { 
            lverror('AllocateComboStructures', 1, iastat,'Error allocating UseFld35 array.','');
  
           Return; 
@@ -603,49 +603,49 @@ break;
  
     if (Allocated(BenefitStruct)) { 
       Deallocate (BenefitStruct, stat=iastat); 
-      if (iastat /= 0) { 
+      if (iastat != 0) { 
          lverror('DeallocateComboStructures', 1, iastat,'Error deallocating BenefitStruct array.',''); 
       } 
     } 
  
     if (Allocated(BenVars)) { 
       Deallocate (BenVars, stat=iastat); 
-      if (iastat /= 0) { 
+      if (iastat != 0) { 
          lverror('DeallocateComboStructures', 1, iastat,'Error deallocating BenVars array.',''); 
       } 
     } 
  
     if (Allocated(FormVars)) { 
       Deallocate (FormVars, stat=iastat); 
-      if (iastat /= 0) { 
+      if (iastat != 0) { 
          lverror('DeallocateComboStructures', 1, iastat,'Error deallocating FormVars array.',''); 
       } 
     } 
  
     if (Allocated(ARETXnonCB)) { 
       Deallocate (ARETXnonCB, stat=iastat); 
-      if (iastat /= 0) { 
+      if (iastat != 0) { 
          lverror('DeallocateComboStructures', 1, iastat,'Error deallocating ARETXnonCB array.',''); 
       } 
     } 
  
     if (Allocated(CRETXnonCB)) { 
       Deallocate (CRETXnonCB, stat=iastat); 
-      if (iastat /= 0) { 
+      if (iastat != 0) { 
          lverror('DeallocateComboStructures', 1, iastat,'Error deallocating CRETXnonCB array.',''); 
       } 
     } 
  
     if (Allocated(HBENnonCB)) { 
       Deallocate (HBENnonCB, stat=iastat); 
-      if (iastat /= 0) { 
+      if (iastat != 0) { 
          lverror('DeallocateComboStructures', 1, iastat,'Error deallocating HBENnonCB array.',''); 
       } 
     } 
  
     if (Allocated(flag)) { 
       Deallocate (flag, stat=iastat); 
-      if (iastat /= 0) { 
+      if (iastat != 0) { 
          lverror('DeallocateComboStructures', 1, iastat,'Error deallocating flag array.',''); 
       } 
     } 
@@ -766,7 +766,7 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
     } 
  
 //// If processing combinations but benefit is defined as an equivalent then skip i 
-    if (CombineEquiv == ProcessCombine && k /= Combs && ValBenefit(i,k-1)->CombineEquiv == 2) { 
+    if (CombineEquiv == ProcessCombine && k != Combs && ValBenefit(i,k-1)->CombineEquiv == 2) { 
       Cycle; 
     } 
  
@@ -784,7 +784,7 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
  
 //// Process Fas35 overrides, if provide 
 //// These values are overrides to the entire definition so don't need ApplyBenReduction or AgeLoopAd 
-    if (k /= Combs && BenVariant == ARets && UseFas35Overrides) { 
+    if (k != Combs && BenVariant == ARets && UseFas35Overrides) { 
  
 //// Arrays UseFld35 and Fld35 are only Allocated if UseFas35Overrides is tru 
       if (UseFld35(k-1, i)) { 
@@ -799,7 +799,7 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
     } 
  
 //// processing equivalent benefit 
-    if (k /= Combs && ValBenefit(i,k-1)->CombineEquiv == 2) { 
+    if (k != Combs && ValBenefit(i,k-1)->CombineEquiv == 2) { 
       PieceType = ValBenefit(i,k-1)->BenEquiv; 
       BenNum = ValBenefit(i,k-1)->BenEquivNum; 
  
@@ -860,14 +860,14 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
  
       Write (ErrMessage,'("CombSet, at age ",i2," @ k = ",i1," @ i = ",i2, ", for type = ", i1)') iLoopAge, k, i, BenVariant; 
        CheckNDP(Trim (ErrMessage) // ', after CalcAns'); 
-      if (ierrcode /= 0) { 
+      if (ierrcode != 0) { 
         Return; 
       } 
  
        ApplyBenReduction(i, k, BenVariant); 
  
        CheckNDP(Trim (ErrMessage) // ', after ApplyBenReduction'); 
-      if (ierrcode /= 0) { 
+      if (ierrcode != 0) { 
       Return; 
       } 
     } !/ Equivalence vs. Combination if statement 
@@ -886,10 +886,10 @@ Function CombSet(k, CombineEquiv, BenVariant) Result (result) {
     } 
  
 //// If BenVariant is Retz then the call came from entry Answrs, which is after the age loop so don't Call AgeLoopAdj 
-    if (k > Combs && BenVariant /= RetZs) { 
+    if (k > Combs && BenVariant != RetZs) { 
        AgeLoopAdj(i, k - 1, BenVariant); 
        CheckNDP(Trim (ErrMessage) // ', after AgeLoopAdj. Check 415.'); 
-      if (ierrcode /= 0) { 
+      if (ierrcode != 0) { 
         Return; 
       } 
      } 
@@ -1083,7 +1083,7 @@ Subroutine CombFinal (CombEquivType);
         if (flag(i,k) == 1) { 
           Write (ErrMessage,'("CombFinal, at age ",i2," @ k = ",i1," @ i = ",i2)') iLoopAge, k, i; 
            CheckNDP(Trim (ErrMessage) // ', before AgeLoopAdj'); 
-          if (ierrcode /= 0) { 
+          if (ierrcode != 0) { 
             Return; 
           } 
  
@@ -1092,7 +1092,7 @@ Subroutine CombFinal (CombEquivType);
            AgeLoopAdj(i, k - 1, 1); 
  
            CheckNDP(Trim (ErrMessage) // ', after AgeLoopAdj. Check 415.'); 
-          if (ierrcode /= 0) { 
+          if (ierrcode != 0) { 
             Return; 
           } 
         } 
@@ -1265,17 +1265,17 @@ break;
       if (flag(i,k) == 1) { 
         Write (ErrMessage,'("CombFinalFas, at age ",i2," @ k = ",i1," @ i = ",i2, ", for type = ",i1)') iLoopAge, k, i, BenVariant; 
          CheckNDP(Trim (ErrMessage) // ', before AgeLoopAdj'); 
-        if (ierrcode /= 0) { 
+        if (ierrcode != 0) { 
           Return; 
         } 
  
 //// If BenVariant is Retz then the call came from entry Answrs, which is after the age loop so don't Call AgeLoopAdj 
-        if (BenVariant /= RetZs) { 
+        if (BenVariant != RetZs) { 
            AgeLoopAdj(i, k - 1, BenVariant); 
         } 
  
          CheckNDP(Trim (ErrMessage) // ', after AgeLoopAdj. Check 415.'); 
-        if (ierrcode /= 0) { 
+        if (ierrcode != 0) { 
           Return; 
         } 
       } 
@@ -1326,12 +1326,12 @@ Subroutine CalcAns (C, BenVariant);
  
 //// Check the number of arguments provided.  If only one or two then ignore the CombSubType and use the default calculation 
   PieceCount = 0; 
-  if (C->Piece(1)->BenNum /= 0) { 
+  if (C->Piece(1)->BenNum != 0) { 
     PieceCount = PieceCount + 1; 
      SetBenEqual(C->Piece(1), AA); 
   } 
  
-  if (C->Piece(2)->BenNum /= 0) { 
+  if (C->Piece(2)->BenNum != 0) { 
     PieceCount = PieceCount + 1; 
  
     if (PieceCount == 1) { 
@@ -1341,7 +1341,7 @@ Subroutine CalcAns (C, BenVariant);
     } 
   } 
  
-  if (C->Piece(3)->BenNum /= 0) { 
+  if (C->Piece(3)->BenNum != 0) { 
     PieceCount = PieceCount + 1; 
  
     if (PieceCount == 1) { 
@@ -1353,7 +1353,7 @@ Subroutine CalcAns (C, BenVariant);
     } 
   } 
  
-  if (C->Piece(4)->BenNum /= 0) { 
+  if (C->Piece(4)->BenNum != 0) { 
     PieceCount = PieceCount + 1; 
  
     if (PieceCount == 1) { 
@@ -1674,7 +1674,7 @@ Subroutine ApplyBenReduction (i, k, BenVariant);
 //// BenVariant = 9 indicates to process all benefit types.  This is done for benefit 
 //// defined as equivalences.  For benefits defined as combinations, only want to proces 
 //// the specified type of benefit 
-    if (BenVariant < 9 && j /= BenVariant) { 
+    if (BenVariant < 9 && j != BenVariant) { 
       Cycle; 
     } 
  
@@ -1874,7 +1874,7 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
     CheckAgeForFAS = iValAge - 1; 
   } 
  
-  if (product /= 'LVADMIN') { 
+  if (product != 'LVADMIN') { 
 //// Cash Balance benefits have the option of being projected with the interes 
 //// crediting rate to NRA unless the payout is the balance itsel 
     balicr = ValBenefit(iben,itype)->Ans->balicr; 
@@ -1940,9 +1940,9 @@ Subroutine AgeLoopAdj (iben, itype, BenVariant);
  
     tPx = aldefer(ConvAge - 15,jsex,jdis) * Recip (aldefer(iLoopAge - 15,jsex,jdis)); 
  
-    if (iyieldsw > 0 && ConvAge /= iValAge) { 
+    if (iyieldsw > 0 && ConvAge != iValAge) { 
       vint = vselp(ConvAge - iValAge) pow( ((iValAge - ConvAge) * Recip ((iValAge - ConvAge) * 1d0)); 
-    } } else { { if (iyieldsw == 0 && iLStype(iben,itype) > 1 && ConvAge /= iLoopAge) { 
+    } } else { { if (iyieldsw == 0 && iLStype(iben,itype) > 1 && ConvAge != iLoopAge) { 
       vint = vir(ConvAge - iLoopAge) pow( ((iLoopAge - ConvAge) * Recip ((iLoopAge - ConvAge) * 1d0)); 
     } } else { { 
       vint = 1.0; 
@@ -2045,7 +2045,7 @@ Subroutine SaveCBBenInfo (iben, CRETin, ARETin, HBENin, ProjBenIn);
   BenVars(iben)->Ben0CB = ARETin; 
   BenVars(iben)->Ben1CB = CRETin; 
  
-  if (product /= 'LVADMIN') { 
+  if (product != 'LVADMIN') { 
     BenVars(iben)->BenZCB = BenZ(iben); 
   } 
  
@@ -2099,7 +2099,7 @@ Subroutine SaveNonCBBenInfo (iben);
     CheckAgeForFAS = iValAge - 1; 
   } 
  
-  if (Product /= 'LVADMIN') { 
+  if (Product != 'LVADMIN') { 
     BenVars(iben)->AbenNonCB = ABEN(iben); 
     BenVars(iben)->BenZnonCB = BENZ(iben); 
     BenVars(iben)->Ben0nonCB = BEN0(iben); 
@@ -2197,7 +2197,7 @@ Subroutine SaveFormInfo ();
  
     FormVars(iben)->ProjBenNonCB = FORM(iben); 
  
-    if (product /= 'LVADMIN') { 
+    if (product != 'LVADMIN') { 
       FormVars(iben)->Ben0nonCB = FORM0(iben); 
       FormVars(iben)->Ben1nonCB = FORM1(iben); 
       FormVars(iben)->BenZnonCB = FORMZ(iben); 
@@ -2426,13 +2426,13 @@ Function CombosADD(A, B, C, D) Result (result) {
   StartWith = ''; 
    InitBenInfo(result, true); 
  
-  if (A->BenNum /= 0) { 
+  if (A->BenNum != 0) { 
      SetBenEqual(A, result); 
     StartWith = 'A'; 
   } 
  
   if (Present (B)) { 
-    if (B->BenNum /= 0) { 
+    if (B->BenNum != 0) { 
       if (StartWith == '') { 
          SetBenEqual(B, result); 
         StartWith = 'B'; 
@@ -2443,7 +2443,7 @@ Function CombosADD(A, B, C, D) Result (result) {
   } 
  
   if (Present (C)) { 
-    if (C->BenNum /= 0) { 
+    if (C->BenNum != 0) { 
       if (StartWith == '') { 
          SetBenEqual(C, result); 
         StartWith = 'C'; 
@@ -2454,7 +2454,7 @@ Function CombosADD(A, B, C, D) Result (result) {
   } 
  
   if (Present (D)) { 
-    if (D->BenNum /= 0) { 
+    if (D->BenNum != 0) { 
       if (StartWith == '') { 
          SetBenEqual(D, result); 
         StartWith = 'D'; 
@@ -2638,13 +2638,13 @@ Function CombosMAX(A, B, C, D) Result (result) {
   StartWith = ''; 
    InitBenInfo(result, true); 
  
-  if (A->BenNum /= 0) { 
+  if (A->BenNum != 0) { 
      SetBenEqual(A, result); 
     StartWith = 'A'; 
   } 
  
   if (Present (B)) { 
-    if (B->BenNum /= 0) { 
+    if (B->BenNum != 0) { 
       if (StartWith == '') { 
          SetBenEqual(B, result); 
         StartWith = 'B'; 
@@ -2655,7 +2655,7 @@ Function CombosMAX(A, B, C, D) Result (result) {
   } 
  
   if (Present (C)) { 
-    if (C->BenNum /= 0) { 
+    if (C->BenNum != 0) { 
       if (StartWith == '') { 
          SetBenEqual(C, result); 
         StartWith = 'C'; 
@@ -2666,7 +2666,7 @@ Function CombosMAX(A, B, C, D) Result (result) {
   } 
  
   if (Present (D)) { 
-    if (D->BenNum /= 0) { 
+    if (D->BenNum != 0) { 
       if (StartWith == '') { 
          SetBenEqual(D, result); 
         StartWith = 'D'; 
@@ -2822,13 +2822,13 @@ Function CombosMIN(A, B, C, D) Result (result) {
   StartWith = ''; 
    InitBenInfo(result, true); 
  
-  if (A->BenNum /= 0) { 
+  if (A->BenNum != 0) { 
      SetBenEqual(A, result); 
     StartWith = 'A'; 
   } 
  
   if (Present (B)) { 
-    if (B->BenNum /= 0) { 
+    if (B->BenNum != 0) { 
       if (StartWith == '') { 
          SetBenEqual(B, result); 
         StartWith = 'B'; 
@@ -2839,7 +2839,7 @@ Function CombosMIN(A, B, C, D) Result (result) {
   } 
  
   if (Present (C)) { 
-    if (C->BenNum /= 0) { 
+    if (C->BenNum != 0) { 
       if (StartWith == '') { 
          SetBenEqual(C, result); 
         StartWith = 'C'; 
@@ -2850,7 +2850,7 @@ Function CombosMIN(A, B, C, D) Result (result) {
   } 
  
   if (Present (D)) { 
-    if (D->BenNum /= 0) { 
+    if (D->BenNum != 0) { 
       if (StartWith == '') { 
          SetBenEqual(D, result); 
         StartWith = 'D'; 
@@ -3011,13 +3011,13 @@ Function CombosMULT(A, B, C, D) Result (result) {
    InitBenInfo(result, true); 
   ResultInitialized = false; 
  
-  if (A->BenNum /= 0) { 
+  if (A->BenNum != 0) { 
      SetBenEqual(A, result); 
     ResultInitialized = true; 
   } 
  
   if (Present (B)) { 
-    if (B->BenNum /= 0) { 
+    if (B->BenNum != 0) { 
       if (ResultInitialized) { 
         result = MultBenInfo(result,B); 
       } } else { { 
@@ -3028,7 +3028,7 @@ Function CombosMULT(A, B, C, D) Result (result) {
   } 
  
   if (Present (C)) { 
-    if (C->BenNum /= 0) { 
+    if (C->BenNum != 0) { 
       if (ResultInitialized) { 
         result = MultBenInfo(result,C); 
       } } else { { 
@@ -3039,7 +3039,7 @@ Function CombosMULT(A, B, C, D) Result (result) {
   } 
  
   if (Present (D)) { 
-    if (D->BenNum /= 0) { 
+    if (D->BenNum != 0) { 
       if (ResultInitialized) { 
         result = MultBenInfo(result,D); 
       } } else { { 

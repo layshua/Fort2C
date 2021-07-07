@@ -234,6 +234,7 @@ def proc_LogicalOperators(fortline):
     fortline = fortline.replace('call ', '')
     fortline = fortline.replace('Call', '')
     fortline = fortline.replace('%', '->')
+    fortline = fortline.replace('/=', '!=')
     fortline = fortline.replace('debug', 'Debug')
     fortline = proc_mathOperators(fortline)
 
