@@ -9,6 +9,10 @@ data = [['character', 'char'],
 df_dtmap = pd.DataFrame(data, columns=['Fortran', 'C'])
 #print(df_dtmap)
 
+lst_allocatable_keyword = ["INTEGER", "INTEGER*2", "REAL(DOUBLE)", "REAL (KIND=DOUBLE)",
+                           "CHARACTER(LEN", "REAL(8)"]
+
+
 # read the source file line by line
 sFilNam = r"Gutils.f90"
 sFil = open(sFilNam, "r")
@@ -106,7 +110,7 @@ def proc_chararray(fortline):
     print()
     parts_left = parts[0].split(",")
     var_type = parts_left[0].replace(parts_left[0], df_dtmap.iloc[0]['C'])
-    var_dim  = parts_left[1].lower().lstrip().rstrip();
+    var_dim  = parts_left[1].lower().lstrip().rstrip()
     var_dim_value_text = var_dim.replace("dimension", "").replace("(", "").replace(")", "")
     var_dim_values = var_dim_value_text.split(":")
 
@@ -118,7 +122,7 @@ def proc_chararray(fortline):
             var_is_param = parts_left[2].lstrip().rstrip().lower()
             var_is_param = "//" +var_is_param
             var_type  = "const "+var_type
-    istartpos = len(fortline)-len(fortline.lstrip());
+    istartpos = len(fortline)-len(fortline.lstrip())
     left_pad  = fortline[0:istartpos]
     var_type = left_pad+var_type
     print(var_type + " " + var_nam + "[" + str(var_dim_lengt) + "] = " + var_val + "; "+var_is_param)
@@ -223,8 +227,8 @@ for declline in sFil:
     if isdeclarationline(declline):
         lstLines.append(declline)
         fort2c(declline)
-        #if (('REAL' in declline.upper()) and ('DIMENSION(' in declline.upper()) and ('ALLOCATABLE(' in declline.upper()) ):
-        #    proc_realkindintent(declline)
+        if ('DIMENSION(' in declline.upper()) and ('ALLOCATABLE(' in declline.upper()) :
+            proc_realkindintent(declline)
         if (('Real' in declline) and ('intent(' in declline)) or ('(Kind=' in declline):
             proc_realkindintent(declline)
         elif (('Integer' in declline) and ('intent' in declline)) or ('Integer' in declline):
