@@ -20,7 +20,7 @@ sFil_c = sFilNam.replace(".f90", ".c")
 soutfile = open(sFil_c, "w")
 soutfile = open(sFil_c, "a")
 
-
+is_prev_case_Statement = False
 
 def LV_print(C_Synt):
     print(C_Synt)
@@ -78,7 +78,6 @@ def proc_realkindintent(fortline):
     iDtype = PARTS.find(df_dtmap.iloc[3]['C'])
     PARTS = PARTS[0:iDtype + 6]
 
-
     result = PARTS + ' ' + parts[1] + ';'
     if result.rstrip().lstrip() == '':
         result = fortline
@@ -125,15 +124,11 @@ def proc_boolintent(fortline):
     PARTS = PARTS.replace(df_dtmap.iloc[2]['Fortran'], df_dtmap.iloc[2]['C'])
     iDtype = PARTS.find(df_dtmap.iloc[2]['C'])
     PARTS = PARTS[0:iDtype + 4]
-
-
     result = PARTS + ' ' + parts[1] + ';'
     if result.rstrip().lstrip() == '':
         result = fortline
     else:
         result = result + amendintentstring(fortline)
-
-
     LV_print(result)
     #LV_print('end---------------')
     return result
@@ -153,11 +148,7 @@ def proc_chararray(fortline):
     var_dim  = parts_left[1].lower().lstrip().rstrip();
     var_dim_value_text = var_dim.replace("dimension", "").replace("(", "").replace(")", "")
     var_dim_values = var_dim_value_text.split(":")
-
-
     var_dim_lengt  = int(var_dim_values[1])-int(var_dim_values[0])+1
-
-
     var_is_param = ""
     if len(parts_left) == 3:
         if ("parameter" in parts_left[2].lstrip().rstrip().lower()):
@@ -176,12 +167,8 @@ def proc_charintent(fortline):
     # LV_print(parts)
     parts[1] = parts[1].replace('\n', '')
     parts_0 = parts[0].split(',')
-
-
     # LV_print(parts_0)
     iDtype = parts_0[0].upper().find('CHARACTER') + 9
-
-
     slen = parts_0[0][iDtype: len(parts_0[0])]
     # LV_print(slen)
     slen = slen.rstrip().lstrip()
@@ -197,13 +184,10 @@ def proc_charintent(fortline):
     PARTS = parts[0].lower().replace(df_dtmap.iloc[0]['Fortran'], df_dtmap.iloc[0]['C'])
     iDtype = PARTS.find(df_dtmap.iloc[0]['C'])
     PARTS = PARTS[0:iDtype + 4]
-
-
     sarVal = parts[1].split(',')
     sVal = ''
     for z in sarVal:
         sVal = sVal + z + slen + ','
-
 
     sVal = sVal[0: len(sVal) - 1]
     # LV_print(sVal)
@@ -268,6 +252,9 @@ def proc_LogicalOperators(fortline):
         fortline = fortline.replace('End Do', '} //end do loop')
     elif (fortline.find('END DO') > -1):
         fortline = fortline.upper().replace('END DO', '} //end do loop')
+    elif (fortline.find('&') == len(fortline)-2):
+        fortline = fortline.replace('&', '').replace('\n','')
+
     else:
         if fortline.find(';') < 0:
             fortline = fortline.replace('\n', ';')
@@ -282,7 +269,7 @@ def proc_doloop(fortline):
     forloopvariables = fortline_minus_comment.split("=")
     forloopvariables[1] = forloopvariables[1].rstrip()
     forloopvariables[1] = forloopvariables[1].replace('\n', '')
-    forlooplimits = forloopvariables[1].split(', ')
+    forlooplimits = forloopvariables[1].split(',')
     i_var = forloopvariables[0].replace("do", '')
     i_var = forloopvariables[0].replace("Do", '')
     i_var = i_var.lstrip()
@@ -297,28 +284,73 @@ def proc_doloop(fortline):
     if istartIdx == -1:
         istartIdx = fortline_minus_comment.find('do')
     lpad     = fortline[0: istartIdx]
-    result = (lpad+"for( "+ i_var+ " ="+ i_equal+ "; "+ i_var+ " < "+ i_range+ "; "+ i_var +" = "+ i_var+ " + "+ i_incr+ ") {")
+    result = (lpad+"for( "+ i_var+ " ="+ i_equal+ "; "+ i_var+ " < "+ i_range+ "; "+ i_var +" = "+ i_var+ " + "+ i_incr+ ") {  //")
     result = result.replace('!', '')
     result = fortline.replace(fortline_minus_comment, result)
     LV_print(result)
 
 
+def proc_typedim_allocatable(fortline):
+    fortline_shadow = fortline.split('::')
+    typevalue = ''
+    dimvalue  = ''
+    allocatvalue = ''
+    targetvalue  = ''
 
+    fortline_shadow[0] = fortline_shadow[0].replace(':, :', ':_ :')
+    fortline_shadow[0] = fortline_shadow[0].replace(':, :, :', ':_ :_ :')
+    fortline_prefix_list = fortline_shadow[0].split(',')
+    for fortline_prefix in fortline_prefix_list:
+        if fortline_prefix.upper().find('TYPE')  > -1:
+            fortline_prefix = fortline_prefix.replace('Type', '')
+            fortline_prefix = fortline_prefix.replace('(', '').replace(')', '')
+            typevalue = fortline_prefix
+        if fortline_prefix.upper().find('REAL') > -1:
+            fortline_prefix = fortline_prefix.replace('Real', '')
+            fortline_prefix = fortline_prefix.replace('(', '').replace(')', '')
+            typevalue = fortline_prefix
+        if fortline_prefix.upper().find('INTEGER') > -1:
+            fortline_prefix = fortline_prefix.replace('Integer', 'int')
+            typevalue = fortline_prefix
+        if fortline_prefix.upper().find('LOGICAL') > -1:
+            fortline_prefix = fortline_prefix.replace('Logical', 'bool')
+            typevalue = fortline_prefix
+        if fortline_prefix.upper().find('DIMENSION') > -1:
+            fortline_prefix = fortline_prefix.replace('_', ',')
+            dimvalue        = fortline_prefix
+        if fortline_prefix.upper().find('ALLOCATABLE') >  -1:
+            allocatvalue   = 'Allocatable'
+        if fortline_prefix.upper().find('TARGET') > -1:
+            targetvalue   = 'Target'
+        result = typevalue
+    fortline_suffix_list = fortline_shadow[1].split(',')
+    strfortline_suffixes = ''
+    for fortline_suffixes in fortline_suffix_list:
+        strfortline_suffixes = strfortline_suffixes +'*'+fortline_suffixes.lstrip().replace('\n', '') +','
+    strfortline_suffixes = strfortline_suffixes[0: len(strfortline_suffixes)-1]
+    strfortline_comment = '//' +allocatvalue +','+ dimvalue +','+ targetvalue
+    sResult = typevalue + ' '+ strfortline_suffixes +' ;' +strfortline_comment
+    LV_print(sResult)
+
+def proc_dim_allocatable(fortline):
+         print('Hello world')
 
 # create an empty list to store the line from the files
 lstLines = []
 
-is_prev_case_Statement = False
+
 for declline in sFil:
 
     if isdeclarationline(declline):
         lstLines.append(declline)
         fort2c(declline)
-        #if (('REAL' in declline.upper()) and ('DIMENSION(' in declline.upper()) and ('ALLOCATABLE(' in declline.upper()) ):
-        #    proc_realkindintent(declline)
-        if (('Real' in declline) and ('(Double)' in declline) and not ('Allocatable') in  declline ) :
+        if ( ('TYPE' in declline.upper()) and ('DIMENSION(' in declline.upper()) and ('ALLOCATABLE' in declline.upper()) ):
+            proc_typedim_allocatable(declline)
+        elif ( ('DIMENSION(' in declline.upper()) and ('ALLOCATABLE' in declline.upper()) and not ('TYPE' in declline.upper()) ):
+            proc_typedim_allocatable(declline)
+        elif (('Real' in declline) and ('(Double)' in declline) and not ('Allocatable') in  declline ) :
             proc_realdimension(declline)
-        elif (('Real' in declline) and ('(Double)' in declline) and ('Dimension' in declline) and not ('Allocatable') in  declline ) :
+        elif (('Real' in declline) and ('(Double)' in declline) and ('Dimension' in declline)) and not (('Allocatable') in  declline ) :
             proc_realdimension(declline)
         elif (('Real' in declline) and ('intent(' in declline)) or ('(Kind=' in declline):
             proc_realkindintent(declline)

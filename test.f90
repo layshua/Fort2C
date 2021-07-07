@@ -1,3 +1,39 @@
+Integer, Dimension(:, :), Allocatable:: flag
+          ValBenefit,                                                                     &
+          CombSet,                                                                        &
+          AllocateComboStructures,                                                        &
+          DeallocateComboStructures,                                                      &
+          ReadMenuVarComb,                                                                &
+    Do k = 1, Ubound (BenefitStruct,2)
+      Do i = 1, Ubound (BenefitStruct,1)
+        Call InitBenInfo(BenefitStruct(i,k)%Ans)
+        Do j = 1, 4
+          Call InitBenInfo(BenefitStruct(i,k)%Piece(j))
+        End Do  ! j
+
+        BenefitStruct(i,k)%ServRedPct = 1d0
+      End Do  ! i
+    End Do  ! k
+
+    Do k = 1, Ubound (BenVars,1)
+      Call InitBenInfo(BenVars(k))
+    End Do  ! k
+
+    Do k = 1,Ubound (FormVars,1)
+      Call InitBenInfo(FormVars(k))
+    End Do  ! k
+
+    ARETXnonCB = 0d0
+    CRETXnonCB = 0d0
+    HBENnonCB  = 0d0
+
+
+
+
+
+Type (tCombMenu), Dimension(:, :), Allocatable, Target:: BenefitStruct
+Type (tBenInfo), Dimension(:), Allocatable:: BenVars, FormVars
+
 Do k = 1, Ubound (BenefitStruct,2)                      ! Combs, ValBens(Ret,Dth,Dis,Wth)
     Do i = 1, Ubound (BenefitStruct,1)
       Call InitBenInfo(BenefitStruct(i,k)%Ans, AllValues=.true.)
