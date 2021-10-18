@@ -63,6 +63,7 @@ def proc_realdimension(fortline):
     parts[1] = parts[1].replace('\n', '')
     parts_0 = parts[0].split(',')
     part1 = parts[1].split(',')
+    ar2D = False
     if len(parts_0) > 1:
         parts_0[1] = parts_0[1].lower().replace('dimension', '')
         parts_0[1] = parts_0[1].replace('(', '').replace(')', '')
@@ -74,16 +75,21 @@ def proc_realdimension(fortline):
         else:
           arLength = int(parts_0[1])
           ar2D = False
+    else:
+        noDimension = True
+        arDim = "Double"
 
-        for _part1 in part1:
-          if ar2D == True:
-        #    arDim = '[' + arLength1, str(arLength2) + '] '
-            arDim = arLength1 + ','+ arLength2;
-            arDim = '[' + arDim +']'
-            parts[1] = parts[1].replace(_part1, _part1 + arDim)
-          else:
-            arDim = '[' + str(arLength) + '] '
-            parts[1] = parts[1].replace(_part1, _part1 + arDim)
+    for _part1 in part1:
+      if ar2D == True:
+    #    arDim = '[' + arLength1, str(arLength2) + '] '
+        arDim = arLength1 + ','+ arLength2;
+        arDim = '[' + arDim +']'
+        parts[1] = parts[1].replace(_part1, _part1 + arDim)
+      elif  noDimension == True:
+        arDim = 'double'
+      else:
+        arDim = '[' + str(arLength) + '] '
+        parts[1] = parts[1].replace(_part1, _part1 + arDim)
     idx_start = fortline.lower().index("real")
 
     lpad = fortline[0:idx_start]
