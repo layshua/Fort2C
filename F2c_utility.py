@@ -64,6 +64,8 @@ def proc_realdimension(fortline):
     parts_0 = parts[0].split(',')
     part1 = parts[1].split(',')
     ar2D = False
+    noDimension = False
+
     if len(parts_0) > 1:
         parts_0[1] = parts_0[1].lower().replace('dimension', '')
         parts_0[1] = parts_0[1].replace('(', '').replace(')', '')
@@ -73,7 +75,11 @@ def proc_realdimension(fortline):
             arLength2 = parts_0[2]
             ar2D  =  True
         else:
-          arLength = int(parts_0[1])
+          ar_Length =  parts_0[1];
+          if (type(ar_Length) == str):
+            arLength = (parts_0[1])
+          else:
+            arLength = int(parts_0[1])
           ar2D = False
     else:
         noDimension = True
