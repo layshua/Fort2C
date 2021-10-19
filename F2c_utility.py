@@ -294,10 +294,15 @@ def proc_mathOperators(fortline):
 
 def proc_LogicalOperators(fortline):
     # fortline = fortline.lower()
+
     fortline = fortline.replace('.not.', '!')
     fortline = fortline.replace('.NOT.', '!')
     fortline = fortline.replace('.and.', '&&')
+    fortline = fortline.replace('.AND.', '&&')
+    fortline = fortline.replace('.And.', '&&')
     fortline = fortline.replace('.or.', '||')
+    fortline = fortline.replace('.Or.', '||')
+    fortline = fortline.replace('.OR.', '||')
     fortline = fortline.replace('.eq.', ' == ')
     fortline = fortline.replace('.EQ.', ' == ')
     fortline = fortline.replace('min', 'Minimum')
@@ -333,13 +338,14 @@ def proc_LogicalOperators(fortline):
     fortline = fortline.replace('.gt.', ' > ')
     fortline = fortline.replace('.LT.', ' > ')
     fortline = fortline.replace('.lt.', ' > ')
+    fortline = fortline.replace('.NE.', '!=')
     fortline = fortline.replace("'", '"')
-    fortline = fortline.replace('0d0', '0').replace('\n', ';')
-    fortline = fortline.replace('0D0', '0').replace('\n', ';')
-    fortline = fortline.replace('0.D0', '0').replace('\n', ';')
-    fortline = fortline.replace('0.d0', '0').replace('\n', ';')
-    fortline = fortline.replace('1.d0', '1').replace('\n', ';')
-    fortline = fortline.replace('1.D0', '1').replace('\n', ';')
+    fortline = fortline.replace('0d0', '0') #.replace('\n', ';')
+    fortline = fortline.replace('0D0', '0') #.replace('\n', ';')
+    fortline = fortline.replace('0.D0', '0') #.replace('\n', ';')
+    fortline = fortline.replace('0.d0', '0') #.replace('\n', ';')
+    fortline = fortline.replace('1.d0', '1') #.replace('\n', ';')
+    fortline = fortline.replace('1.D0', '1')#.replace('\n', ';')
     fortline = fortline.replace('.GE.', ' >= ')
     fortline = fortline.replace('.ge', ' >= ')
     fortline = fortline.replace('.LE.', ' <= ')
@@ -369,6 +375,8 @@ def proc_LogicalOperators(fortline):
         fortline = fortline.replace('&', '').replace('\n', '')
 
     else:
+        if fortline.find('}') > -1:
+            fortline = fortline.replace('\n', '')
         if fortline.find(';') < 0:
             fortline = fortline.replace('\n', ';')
     LV_print(fortline)
