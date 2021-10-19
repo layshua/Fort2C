@@ -32,7 +32,7 @@ def fort2c(fortline):
 
 
 def isdeclarationline(fortline):
-    if ("::" in fortline) or (("DOUBLE") in fortline.upper() and ("PRECISION") in fortline.upper()):
+    if ("::" in fortline) or (("DOUBLE") in fortline.upper() and ("PRECISION") in fortline.upper()) or ('&' in fortline):
         return True
     else:
         return False
@@ -47,6 +47,7 @@ def amendintentstring(fortline):
     if fortline.upper().find("INTENT(INOUT)") > 0:
         result = result + " //input&Output parameter"
     return result
+
 
 def proc_DoublePrecision(fortline):
     parts = fortline.split('Precision')
@@ -73,34 +74,35 @@ def proc_realdimension(fortline):
             parts_0[2] = parts_0[2].replace(')', '')
             arLength1 = parts_0[1]
             arLength2 = parts_0[2]
-            ar2D  =  True
+            ar2D = True
         else:
-          ar_Length =  parts_0[1];
-          if (type(ar_Length) == str):
-            arLength = (parts_0[1])
-          else:
-            arLength = int(parts_0[1])
-          ar2D = False
+            ar_Length = parts_0[1];
+            if (type(ar_Length) == str):
+                arLength = (parts_0[1])
+            else:
+                arLength = int(parts_0[1])
+            ar2D = False
     else:
         noDimension = True
         arDim = "Double"
 
     for _part1 in part1:
-      if ar2D == True:
-    #    arDim = '[' + arLength1, str(arLength2) + '] '
-        arDim = arLength1 + ','+ arLength2;
-        arDim = '[' + arDim +']'
-        parts[1] = parts[1].replace(_part1, _part1 + arDim)
-      elif  noDimension == True:
-        arDim = 'double'
-      else:
-        arDim = '[' + str(arLength) + '] '
-        parts[1] = parts[1].replace(_part1, _part1 + arDim)
+        if ar2D == True:
+            #    arDim = '[' + arLength1, str(arLength2) + '] '
+            arDim = arLength1 + ',' + arLength2;
+            arDim = '[' + arDim + ']'
+            parts[1] = parts[1].replace(_part1, _part1 + arDim)
+        elif noDimension == True:
+            arDim = 'double'
+        else:
+            arDim = '[' + str(arLength) + '] '
+            parts[1] = parts[1].replace(_part1, _part1 + arDim)
     idx_start = fortline.lower().index("real")
 
     lpad = fortline[0:idx_start]
     result = '{} {} {} ;'.format(lpad, 'double', parts[1])
     LV_print(result)
+
 
 def proc_realDim(fortline):
     parts = fortline.split('::')
@@ -109,7 +111,37 @@ def proc_realDim(fortline):
     parts[0] = parts[0].replace('Real(8)', 'double')
     parts[1] = parts[1].replace('\n', '')
 
-    result = parts[0] + ' ' + parts[1] + ';'
+    parts[1] = parts[1].replace('&', '')
+    lstParts = parts[1].split(',')
+    parts_0 = parts[0].split(',')
+    if ('dimension' in fortline.lower()) and (parts_0.__len__() == 2):
+       if ('dimension' in parts_0[1].lower()):
+          parts_1 = parts_0[1].lower().lstrip().replace('dimension', '').replace('(', '[').replace(')', ']')
+          for _parts_1 in lstParts:
+             parts[1] = parts[1].replace(_parts_1, _parts_1 + parts_1)
+       result = '  {} {} ;'.format('double', parts[1])
+    elif ('dimension' in fortline.lower()) and (parts_0.__len__() ==3):
+        lstparts_0 = parts[0].lower().split('dimension')
+        lstparts_0[1] = lstparts_0[1].replace('(', '').replace(')', '')
+        lstparts_0_1 = lstparts_0[1].split(',')
+        if lstparts_0_1.__len__() == 2:
+            parts_1 = '{}{}{} {}{}{}'.format('[',lstparts_0_1[0],']','[',lstparts_0_1[1],']')
+        else:
+            parts_1 = '{}{}{}'.format('[', lstparts_0_1[0], ']')
+        if ('dimension' in parts_0[1].lower()):
+            #parts_1 = lstparts_0[1].lower().lstrip().replace('(', '[').replace(')', ']')
+            for _parts_1 in lstParts:
+                if _parts_1.lstrip() != '':
+                    parts[1] = parts[1].replace(_parts_1, _parts_1 + parts_1)
+        if ('&' in declline):
+            result = '  {} {} '.format('double', parts[1])
+        else:
+            result = '  {} {} ;'.format('double', parts[1])
+    else:
+        if ('&' in declline):
+          result = parts[0] + ' ' + parts[1]
+        else:
+          result = parts[0] + ' ' + parts[1] + ';'
     LV_print(result)
 
     return result
@@ -141,8 +173,11 @@ def proc_intintent(fortline):
     _parts = parts[0].lower().replace(df_dtmap.iloc[1]['Fortran'], df_dtmap.iloc[1]['C'])
     iDtype = _parts.find(df_dtmap.iloc[1]['C'])
     _parts = _parts[0:iDtype + 3]
-
-    result = _parts + ' ' + parts[1] + ';'
+    if parts[1].find('&'):
+      parts[1] = parts[1].replace('&', '')
+      result = _parts + ' ' + parts[1]
+    else:
+      result = _parts + ' ' + parts[1] + ';'
     if result.rstrip().lstrip() == '':
         result = fortline
     else:
@@ -161,8 +196,8 @@ def proc_boolintent(fortline):
     # LV_print(parts)
     parts[1] = parts[1].replace('\n', '')
     PARTS = parts[0].replace('Logical', 'logical')
-    print(df_dtmap.iloc[2]['Fortran'])
-    print(df_dtmap.iloc[2]['C'])
+ #   print(df_dtmap.iloc[2]['Fortran'])
+ #   print(df_dtmap.iloc[2]['C'])
     PARTS = PARTS.replace(df_dtmap.iloc[2]['Fortran'], df_dtmap.iloc[2]['C'])
     iDtype = PARTS.find(df_dtmap.iloc[2]['C'])
     PARTS = PARTS[0:iDtype + 4]
@@ -251,6 +286,8 @@ def proc_mathOperators(fortline):
         result = fortline.replace("**", "pow(")
     if fortline.find('Abs') > -1:
         result = fortline.replace("Abs", "abs")
+    if fortline.find('Sqrt') > -1:
+        result = fortline.replace("Sqrt", "sqrt")
 
     return result
 
@@ -258,12 +295,26 @@ def proc_mathOperators(fortline):
 def proc_LogicalOperators(fortline):
     # fortline = fortline.lower()
     fortline = fortline.replace('.not.', '!')
+    fortline = fortline.replace('.NOT.', '!')
     fortline = fortline.replace('.and.', '&&')
     fortline = fortline.replace('.or.', '||')
-    fortline = fortline.replace('.eq.', '==')
+    fortline = fortline.replace('.eq.', ' == ')
+    fortline = fortline.replace('.EQ.', ' == ')
+    fortline = fortline.replace('min', 'Minimum')
+    fortline = fortline.replace('Min', 'Minimum')
+    fortline = fortline.replace('max', 'Maximum')
+    fortline = fortline.replace('Max', 'Maximum')
+
+    fortline = fortline.replace('Cycle', 'continue;')
+    fortline = fortline.replace('cycle', 'continue;')
+    fortline = fortline.replace('CYCLE', 'continue;')
+
+
+    fortline = fortline.replace('.TRUE.', 'true')
     fortline = fortline.replace('.True.', 'true')
     fortline = fortline.replace('.true.', 'true')
     fortline = fortline.replace('.false.', 'false')
+    fortline = fortline.replace('.FALSE.', 'false')
     fortline = fortline.replace('.False.', 'false')
     fortline = fortline.replace(' if ', ' if ')
     fortline = fortline.replace('subroutine', 'void')
@@ -278,17 +329,32 @@ def proc_LogicalOperators(fortline):
     fortline = fortline.replace('%', '->')
     fortline = fortline.replace('/=', '!=')
     fortline = fortline.replace('debug', 'Debug')
+    fortline = fortline.replace('.GT.', ' > ')
+    fortline = fortline.replace('.gt.', ' > ')
+    fortline = fortline.replace('.LT.', ' > ')
+    fortline = fortline.replace('.lt.', ' > ')
+    fortline = fortline.replace("'", '"')
+    fortline = fortline.replace('0d0', '0').replace('\n', ';')
+    fortline = fortline.replace('0D0', '0').replace('\n', ';')
+    fortline = fortline.replace('0.D0', '0').replace('\n', ';')
+    fortline = fortline.replace('0.d0', '0').replace('\n', ';')
+    fortline = fortline.replace('1.d0', '1').replace('\n', ';')
+    fortline = fortline.replace('1.D0', '1').replace('\n', ';')
+    fortline = fortline.replace('.GE.', ' >= ')
+    fortline = fortline.replace('.ge', ' >= ')
+    fortline = fortline.replace('.LE.', ' <= ')
+    fortline = fortline.replace('.le.', ' <= ')
     fortline = proc_mathOperators(fortline)
 
     if fortline.find('if ') > -1:
-        fortline = fortline.replace('\n', '')
+        fortline = fortline.replace('\n', '').replace(';', '')
     elif fortline.find('If ') > -1:
-        fortline = fortline.replace('If', 'if')
+        fortline = fortline.replace('If', 'if').replace(';', '')
         fortline = fortline.replace('\n', '')
     elif fortline.find('else') > -1:
-        fortline = fortline.replace('\n', '')
+        fortline = fortline.replace('\n', '').replace(';', '')
     elif fortline.find('Else') > -1:
-        fortline = fortline.replace('\n', '')
+        fortline = fortline.replace('\n', '').replace(';', '')
     elif (fortline.lstrip() == '}\n'):
         fortline = fortline.replace('\n', '')
     elif (fortline.upper().find('FUNCTION ') > -1):
@@ -301,8 +367,6 @@ def proc_LogicalOperators(fortline):
         fortline = fortline.upper().replace('END DO', '} //end do loop')
     elif (fortline.find('&') == len(fortline) - 2):
         fortline = fortline.replace('&', '').replace('\n', '')
-    elif (fortline.find('0d0') > -1):
-        fortline = fortline.replace('0d0', '0').replace('\n', ';')
 
     else:
         if fortline.find(';') < 0:
@@ -333,7 +397,7 @@ def proc_doloop(fortline):
         istartIdx = fortline_minus_comment.find('do')
     lpad = fortline[0: istartIdx]
     result = (
-                lpad + "for( " + i_var + " =" + i_equal + "; " + i_var + " < " + i_range + "; " + i_var + " = " + i_var + " + " + i_incr + ") {  //")
+            lpad + "for( " + i_var + " =" + i_equal + "; " + i_var + " < " + i_range + "; " + i_var + " = " + i_var + " + " + i_incr + ") {  //")
     result = result.replace('!', '')
     result = fortline.replace(fortline_minus_comment, result)
     LV_print(result)
@@ -409,7 +473,7 @@ for declline in sFil:
             proc_realdimension(declline)
         elif (('Real' in declline) and ('intent(' in declline)) or ('(Kind=' in declline):
             proc_realkindintent(declline)
-        elif (('Real' in declline) and '(8)' in declline):
+        elif (('Real' in declline) and ('(8)' in declline)):
             proc_realDim(declline)
         elif (('Integer' in declline) and ('intent' in declline)) or (
                 ('Integer' in declline) and not ('Allocatable') in declline):
@@ -428,7 +492,8 @@ for declline in sFil:
                     declline = declline.replace('&', '')
             else:
                 declline = declline.replace('&', '')
-            LV_print(declline + '//Not converted')
+            proc_LogicalOperators(declline)
+            #LV_print(declline + '//Not converted')
     else:
         a = (declline.rstrip())
         if len(a) > 0:
@@ -474,6 +539,7 @@ for declline in sFil:
                 LV_print(b[0:len(declline) - 1])
                 # proc_LogicalOperators(declline)
         else:
+            a = a.replace('0D0', '0')
             LV_print(a)
 sFil.close()
 soutfile.close()
