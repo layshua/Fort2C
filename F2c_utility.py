@@ -1,9 +1,9 @@
 import pandas as pd
 
-data = [['character', 'char'],
-        ['integer', 'int'],
-        ['logical', 'bool'],
-        ['real', 'double']]
+data = [['CHARACTER', 'char'],
+        ['INTEGER', 'int'],
+        ['LOGICAL', 'bool'],
+        ['REAL', 'double']]
 
 df_dtmap = pd.DataFrame(data, columns=['Fortran', 'C'])
 # LV_print(df_dtmap)
@@ -11,7 +11,7 @@ df_dtmap = pd.DataFrame(data, columns=['Fortran', 'C'])
 
 # read the source file line by line
 # sFilNam = r"test.f90"
-sFilNam = r"test.f90"
+sFilNam = r"./src/mesh.f90"
 sFil = open(sFilNam, "r")
 sFil_c = sFilNam.replace(".f90", ".c")
 soutfile = open(sFil_c, "w")
@@ -50,9 +50,9 @@ def amendintentstring(fortline):
 
 
 def proc_DoublePrecision(fortline):
-    parts = fortline.split('Precision')
+    parts = fortline.split('PRECISION')
     parts[1] = parts[1].replace('\n', '')
-    idx_Start = fortline.index("Double")
+    idx_Start = fortline.index("DOUBLE")
     lpad = fortline[0:idx_Start]
 
     Result = '{} {} {} {};'.format(lpad, 'double', parts[1], '//Not Converted')
@@ -68,7 +68,7 @@ def proc_realdimension(fortline):
     noDimension = False
 
     if len(parts_0) > 1:
-        parts_0[1] = parts_0[1].lower().replace('dimension', '')
+        parts_0[1] = parts_0[1].lower().replace('DIMENSION', '')
         parts_0[1] = parts_0[1].replace('(', '').replace(')', '')
         if len(parts_0) == 3:
             parts_0[2] = parts_0[2].replace(')', '')
@@ -84,7 +84,7 @@ def proc_realdimension(fortline):
             ar2D = False
     else:
         noDimension = True
-        arDim = "Double"
+        arDim = "DOUBLE"
 
     for _part1 in part1:
         if ar2D == True:
@@ -97,7 +97,7 @@ def proc_realdimension(fortline):
         else:
             arDim = '[' + str(arLength) + '] '
             parts[1] = parts[1].replace(_part1, _part1 + arDim)
-    idx_start = fortline.lower().index("real")
+    idx_start = fortline.lower().index("REAL")
 
     lpad = fortline[0:idx_start]
     result = '{} {} {} ;'.format(lpad, 'double', parts[1])
@@ -107,28 +107,31 @@ def proc_realdimension(fortline):
 def proc_realDim(fortline):
     parts = fortline.split('::')
     # LV_print(parts)
-    parts[0] = parts[0].replace('Real (8)', 'double')
-    parts[0] = parts[0].replace('Real(8)', 'double')
+    parts[0] = parts[0].replace('REAL (8)', 'double')
+    parts[0] = parts[0].replace('REAL(8)', 'double')
+    parts[0] = parts[0].replace('REAL               ::', 'double')
+    parts[0] = parts[0].replace('REAL, INTENT(IN) ::', 'double')
+    parts[0] = parts[0].replace('REAL,INTENT(OUT)   ::', 'double')
     parts[1] = parts[1].replace('\n', '')
 
     parts[1] = parts[1].replace('&', '')
     lstParts = parts[1].split(',')
     parts_0 = parts[0].split(',')
-    if ('dimension' in fortline.lower()) and (parts_0.__len__() == 2):
-       if ('dimension' in parts_0[1].lower()):
-          parts_1 = parts_0[1].lower().lstrip().replace('dimension', '').replace('(', '[').replace(')', ']')
+    if ('DIMENSION' in fortline.lower()) and (parts_0.__len__() == 2):
+       if ('DIMENSION' in parts_0[1].lower()):
+          parts_1 = parts_0[1].lower().lstrip().replace('DIMENSION', '').replace('(', '[').replace(')', ']')
           for _parts_1 in lstParts:
              parts[1] = parts[1].replace(_parts_1, _parts_1 + parts_1)
        result = '  {} {} ;'.format('double', parts[1])
-    elif ('dimension' in fortline.lower()) and (parts_0.__len__() ==3):
-        lstparts_0 = parts[0].lower().split('dimension')
+    elif ('DIMENSION' in fortline.lower()) and (parts_0.__len__() ==3):
+        lstparts_0 = parts[0].lower().split('DIMENSION')
         lstparts_0[1] = lstparts_0[1].replace('(', '').replace(')', '')
         lstparts_0_1 = lstparts_0[1].split(',')
         if lstparts_0_1.__len__() == 2:
             parts_1 = '{}{}{} {}{}{}'.format('[',lstparts_0_1[0],']','[',lstparts_0_1[1],']')
         else:
             parts_1 = '{}{}{}'.format('[', lstparts_0_1[0], ']')
-        if ('dimension' in parts_0[1].lower()):
+        if ('DIMENSION' in parts_0[1].lower()):
             #parts_1 = lstparts_0[1].lower().lstrip().replace('(', '[').replace(')', ']')
             for _parts_1 in lstParts:
                 if _parts_1.lstrip() != '':
@@ -195,7 +198,7 @@ def proc_boolintent(fortline):
     parts = fortline.split('::')
     # LV_print(parts)
     parts[1] = parts[1].replace('\n', '')
-    PARTS = parts[0].replace('Logical', 'logical')
+    PARTS = parts[0].replace('LOGICAL', 'logical')
  #   print(df_dtmap.iloc[2]['Fortran'])
  #   print(df_dtmap.iloc[2]['C'])
     PARTS = PARTS.replace(df_dtmap.iloc[2]['Fortran'], df_dtmap.iloc[2]['C'])
@@ -212,7 +215,7 @@ def proc_boolintent(fortline):
 
 
 def proc_chararray(fortline):
-    fortline = fortline.replace('Character', 'character')
+    fortline = fortline.replace('CHARACTER', 'character')
     parts = fortline.split('::')
     # Right hand side values
     parts_right = parts[1].split("=")
@@ -223,7 +226,7 @@ def proc_chararray(fortline):
     parts_left = parts[0].split(",")
     var_type = parts_left[0].replace(parts_left[0], df_dtmap.iloc[0]['C'])
     var_dim = parts_left[1].lower().lstrip().rstrip();
-    var_dim_value_text = var_dim.replace("dimension", "").replace("(", "").replace(")", "")
+    var_dim_value_text = var_dim.replace("DIMENSION", "").replace("(", "").replace(")", "")
     var_dim_values = var_dim_value_text.split(":")
     var_dim_lengt = int(var_dim_values[1]) - int(var_dim_values[0]) + 1
     var_is_param = ""
@@ -239,7 +242,7 @@ def proc_chararray(fortline):
 
 
 def proc_charintent(fortline):
-    fortline = fortline.replace('Character', 'character')
+    fortline = fortline.replace('CHARACTER', 'character')
     parts = fortline.split('::')
     # LV_print(parts)
     parts[1] = parts[1].replace('\n', '')
@@ -252,7 +255,7 @@ def proc_charintent(fortline):
     slen = slen[1:len(slen) - 1]
     # LV_print('*CHARAC')
     # LV_print(slen)
-    slen = slen.replace('Len=', '')
+    slen = slen.replace('LEN=', '')
     slen = slen.replace('len=', '')
     slen = slen.replace('*', '')
     slen = '[' + slen + ']'
@@ -282,12 +285,12 @@ def proc_mathOperators(fortline):
     result = fortline
     if (fortline.find(" aint(") > -1):
         result = fortline.replace("aint", "trunc")
-    if (fortline.find(" ** ") > -1):
+    if (fortline.find("**") > -1):
         result = fortline.replace("**", "pow(")
-    if fortline.find('Abs') > -1:
+    if fortline.find('ABS') > -1:
         result = fortline.replace("Abs", "abs")
-    if fortline.find('Sqrt') > -1:
-        result = fortline.replace("Sqrt", "sqrt")
+    if fortline.find('SQRT') > -1:
+        result = fortline.replace("SQRT", "sqrt")
 
     return result
 
@@ -306,9 +309,9 @@ def proc_LogicalOperators(fortline):
     fortline = fortline.replace('.eq.', ' == ')
     fortline = fortline.replace('.EQ.', ' == ')
     fortline = fortline.replace('min', 'Minimum')
-    fortline = fortline.replace('Min', 'Minimum')
+    fortline = fortline.replace('MIN', 'Minimum')
     fortline = fortline.replace('max', 'Maximum')
-    fortline = fortline.replace('Max', 'Maximum')
+    fortline = fortline.replace('MAX', 'Maximum')
 
     fortline = fortline.replace('Cycle', 'continue;')
     fortline = fortline.replace('cycle', 'continue;')
@@ -321,16 +324,16 @@ def proc_LogicalOperators(fortline):
     fortline = fortline.replace('.false.', 'false')
     fortline = fortline.replace('.FALSE.', 'false')
     fortline = fortline.replace('.False.', 'false')
-    fortline = fortline.replace(' if ', ' if ')
-    fortline = fortline.replace('subroutine', 'void')
-    fortline = fortline.replace('then', '{')
+    fortline = fortline.replace(' IF ', ' if ')
+    fortline = fortline.replace('SUBROUTINE', 'void')
+    fortline = fortline.replace('THEN', '{')
     fortline = fortline.replace('Then', '{')
     fortline = fortline.replace('else', '} else {')
-    fortline = fortline.replace('Else', '} else {')
-    fortline = fortline.replace('endif', '}')
-    fortline = fortline.replace('End If', '}')
+    fortline = fortline.replace('ELSE', '} else {')
+    fortline = fortline.replace('ENDIF', '}')
+    fortline = fortline.replace('END IF', '}')
     fortline = fortline.replace('call ', '')
-    fortline = fortline.replace('Call', '')
+    fortline = fortline.replace('CALL', '')
     fortline = fortline.replace('%', '->')
     fortline = fortline.replace('/=', '!=')
     fortline = fortline.replace('debug', 'Debug')
@@ -354,12 +357,12 @@ def proc_LogicalOperators(fortline):
 
     if fortline.find('if ') > -1:
         fortline = fortline.replace('\n', '').replace(';', '')
-    elif fortline.find('If ') > -1:
-        fortline = fortline.replace('If', 'if').replace(';', '')
+    elif fortline.find('IF ') > -1:
+        fortline = fortline.replace('IF', 'if').replace(';', '')
         fortline = fortline.replace('\n', '')
     elif fortline.find('else') > -1:
         fortline = fortline.replace('\n', '').replace(';', '')
-    elif fortline.find('Else') > -1:
+    elif fortline.find('ELSE') > -1:
         fortline = fortline.replace('\n', '').replace(';', '')
     elif (fortline.lstrip() == '}\n'):
         fortline = fortline.replace('\n', '')
@@ -367,8 +370,8 @@ def proc_LogicalOperators(fortline):
         fortline = fortline.replace('\n', ' { ')
     elif (fortline.upper().find('ENDDO') > -1):
         fortline = fortline.upper().replace('ENDDO', '} //end do loop')
-    elif (fortline.find('End Do') > -1):
-        fortline = fortline.replace('End Do', '} //end do loop')
+    elif (fortline.find('END DO') > -1):
+        fortline = fortline.replace('END DO', '} //end do loop')
     elif (fortline.find('END DO') > -1):
         fortline = fortline.upper().replace('END DO', '} //end do loop')
     elif (fortline.find('&') == len(fortline) - 2):
@@ -377,7 +380,9 @@ def proc_LogicalOperators(fortline):
     else:
         if fortline.find('}') > -1:
             fortline = fortline.replace('\n', '')
-        if fortline.find(';') < 0:
+        if fortline.find('SUBROUTINE') > 0:
+            fortline = fortline.replace('\n', '{')
+        elif fortline.find(';') < 0:
             fortline = fortline.replace('\n', ';')
     LV_print(fortline)
     return fortline
@@ -391,7 +396,7 @@ def proc_doloop(fortline):
     forloopvariables[1] = forloopvariables[1].replace('\n', '')
     forlooplimits = forloopvariables[1].split(',')
     i_var = forloopvariables[0].replace("do", '')
-    i_var = forloopvariables[0].replace("Do", '')
+    i_var = forloopvariables[0].replace("DO", '')
     i_var = i_var.lstrip()
     i_equal = forlooplimits[0]
     i_range = forlooplimits[1]
@@ -400,7 +405,7 @@ def proc_doloop(fortline):
     else:
         i_incr = '+'
     # LV_print(i_equal, i_range, i_incr)
-    istartIdx = fortline_minus_comment.find('Do')
+    istartIdx = fortline_minus_comment.find('DO')
     if istartIdx == -1:
         istartIdx = fortline_minus_comment.find('do')
     lpad = fortline[0: istartIdx]
@@ -423,18 +428,18 @@ def proc_typedim_allocatable(fortline):
     fortline_prefix_list = fortline_shadow[0].split(',')
     for fortline_prefix in fortline_prefix_list:
         if fortline_prefix.upper().find('TYPE') > -1:
-            fortline_prefix = fortline_prefix.replace('Type', '')
+            fortline_prefix = fortline_prefix.replace('TYPE', '')
             fortline_prefix = fortline_prefix.replace('(', '').replace(')', '')
             typevalue = fortline_prefix
         if fortline_prefix.upper().find('REAL') > -1:
-            fortline_prefix = fortline_prefix.replace('Real', '')
+            fortline_prefix = fortline_prefix.replace('REAL', '')
             fortline_prefix = fortline_prefix.replace('(', '').replace(')', '')
             typevalue = fortline_prefix
         if fortline_prefix.upper().find('INTEGER') > -1:
-            fortline_prefix = fortline_prefix.replace('Integer', 'int')
+            fortline_prefix = fortline_prefix.replace('INTEGER', 'int')
             typevalue = fortline_prefix
         if fortline_prefix.upper().find('LOGICAL') > -1:
-            fortline_prefix = fortline_prefix.replace('Logical', 'bool')
+            fortline_prefix = fortline_prefix.replace('LOGICAL', 'bool')
             typevalue = fortline_prefix
         if fortline_prefix.upper().find('DIMENSION') > -1:
             fortline_prefix = fortline_prefix.replace('_', ',')
@@ -472,24 +477,24 @@ for declline in sFil:
         elif (('DIMENSION(' in declline.upper()) and ('ALLOCATABLE' in declline.upper()) and not (
                 'TYPE' in declline.upper())):
             proc_typedim_allocatable(declline)
-        elif (('Double') in declline and ('Precision' in declline)):
+        elif (('DOUBLE') in declline and ('Precision' in declline)):
             proc_DoublePrecision(declline)
-        elif (('Real' in declline) and ('(Double)' in declline) and ('Dimension' in declline)) and not (
+        elif (('REAL' in declline) and ('(DOUBLE)' in declline) and ('DIMENSION' in declline)) and not (
                 ('Allocatable') in declline):
             proc_realdimension(declline)
-        elif (('Real' in declline) and ('(Double)' in declline) and not ('Allocatable') in declline):
+        elif (('REAL' in declline) and ('(DOUBLE)' in declline) and not ('Allocatable') in declline):
             proc_realdimension(declline)
-        elif (('Real' in declline) and ('intent(' in declline)) or ('(Kind=' in declline):
+        elif (('REAL' in declline) and ('intent(' in declline)) or ('(Kind=' in declline):
             proc_realkindintent(declline)
-        elif (('Real' in declline) and ('(8)' in declline)):
+        elif (('REAL' in declline) and ('(8)' in declline)):
             proc_realDim(declline)
-        elif (('Integer' in declline) and ('intent' in declline)) or (
-                ('Integer' in declline) and not ('Allocatable') in declline):
+        elif (('INTEGER' in declline) and ('intent' in declline)) or (
+                ('INTEGER' in declline) and not ('Allocatable') in declline):
             proc_intintent(declline)
-        elif (('logical' in declline) and ('intent' in declline)) or (
-                ('Logical' in declline) and not ('Allocatable') in declline):
+        elif (('LOGICAL' in declline) and ('intent' in declline)) or (
+                ('LOGICAL' in declline) and not ('Allocatable') in declline):
             proc_boolintent(declline)
-        elif ('CHARACTER' in declline.upper()) and ('dimension' in declline.lower()) and ('(/' in declline):
+        elif ('CHARACTER' in declline.upper()) and ('DIMENSION' in declline.lower()) and ('(/' in declline):
             proc_chararray(declline)
         elif (('CHARACTER' in declline.upper()) and ('intent' in declline)) or ('CHARACTER' in declline.upper()):
             proc_charintent(declline)
@@ -512,29 +517,29 @@ for declline in sFil:
                     LV_print(a.upper().replace('END FUNCTION', '} // end function'))
                 elif a.upper().find('CASE') > - 1 and a.upper().find('SELECT') > - 1:
                     a = a.replace('\n', '')
-                    result = a.replace('Select Case', 'Switch')
+                    result = a.replace('SELECT CASE', 'switch')
                     result = result + '{'
                     LV_print(result)
                 elif a.upper().find('CASE') > - 1:
                     a = a.replace('\n', '')
                     idx_end = a.find('!')
                     if idx_end > 0:
-                        result = a.replace('!', ': //')
+                        result = a.replace('!', ':{ //')
                     else:
                         result = a + ':'
                     if is_prev_case_Statement == True:
-                        LV_print('break;')
+                        LV_print('break;\n}')
                     is_prev_case_Statement = True
                     LV_print(result)
 
                 elif a.upper().find('SELECT') > - 1 and a.upper().find('END') > - 1:
                     a = a.replace('\n', '')
                     LV_print('break;')
-                    result = a.replace('End Select', '}')
+                    result = a.replace('END SELECT', '}')
                     is_prev_case_Statement = False
                     LV_print(result)
                 elif len(a.lstrip()) > 0:
-                    if a.find("while") < 0:
+                    if a.find("WHILE") < 0:
                         if a.lstrip()[0:2] in ['do', 'Do', 'DO']:
                             proc_doloop(declline)
                         else:
